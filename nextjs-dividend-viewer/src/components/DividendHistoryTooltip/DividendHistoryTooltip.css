@@ -1,0 +1,12 @@
+.total-dividends-value {
+  font-weight: 600;
+  color: #1976d2;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.total-dividends-value:hover {
+  color: #1565c0;
+}

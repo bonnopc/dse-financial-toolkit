@@ -1,0 +1,450 @@
+.table-container {
+  margin: 20px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  position: relative;
+  overflow: visible;
+}
+
+.table-scroll-wrapper {
+  overflow-x: auto;
+  border-radius: 8px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.dividend-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: white;
+  min-width: 2800px; /* Increased for financial performance columns */
+}
+
+.dividend-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: #2c3e50;
+}
+
+.dividend-table th {
+  background-color: #2c3e50;
+  color: white;
+  padding: 12px 8px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.sortable-header {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+  position: relative;
+}
+
+.sortable-header:hover {
+  background-color: #34495e !important;
+}
+
+.sort-icon {
+  margin-left: 4px;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* Sticky first column header */
+.dividend-table th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 101;
+  background-color: #2c3e50;
+}
+
+.dividend-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.even-row {
+  background-color: #f8f9fa;
+}
+
+.even-row .company-code {
+  background-color: #f8f9fa;
+}
+
+.odd-row {
+  background-color: white;
+}
+
+.odd-row .company-code {
+  background-color: white;
+}
+
+.dividend-table tr:hover {
+  background-color: #e3f2fd !important;
+  cursor: pointer;
+}
+
+.dividend-table tr:hover .company-code {
+  background-color: #e3f2fd !important;
+}
+
+.company-code {
+  font-weight: 600;
+  color: #1976d2;
+  min-width: 100px;
+  position: sticky;
+  left: 0;
+  background-color: inherit;
+  z-index: 50;
+}
+
+.company-name {
+  font-style: italic;
+  color: #424242;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sector {
+  background-color: #e8f5e8;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #2e7d32;
+  min-width: 120px;
+}
+
+.financial-score-cell {
+  text-align: center;
+  padding: 8px;
+  min-width: 80px;
+}
+
+.price-value {
+  text-align: center;
+  font-weight: 600;
+  color: #1976d2;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  min-width: 100px;
+}
+
+.dividend-yield-value {
+  text-align: center;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  min-width: 100px;
+  color: #388e3c; /* Default green for positive yields */
+}
+
+/* Dynamic color coding for dividend yields */
+.yield-excellent {
+  color: #2e7d32 !important; /* Dark green for excellent yield (8%+) */
+  background-color: #e8f5e8;
+}
+
+.yield-good {
+  color: #388e3c !important; /* Green for good yield (5-8%) */
+  background-color: #f1f8e9;
+}
+
+.yield-average {
+  color: #f57c00 !important; /* Orange for average yield (3-5%) */
+  background-color: #fff8e1;
+}
+
+.yield-poor {
+  color: #d32f2f !important; /* Red for poor yield (1-3%) */
+  background-color: #ffebee;
+}
+
+.yield-very-poor {
+  color: #757575 !important; /* Gray for very poor yield (<1%) */
+  background-color: #fafafa;
+}
+
+.yield-none {
+  color: #9e9e9e !important; /* Light gray for no yield */
+  font-style: italic;
+}
+
+.dividend-value {
+  font-weight: 600;
+  text-align: center;
+  color: #388e3c;
+  min-width: 80px;
+}
+
+.total-dividends {
+  font-weight: 600;
+  text-align: center;
+  color: #1976d2;
+  min-width: 80px;
+}
+
+.loan-value {
+  text-align: right;
+  font-family: 'Courier New', monospace;
+  color: #d32f2f;
+  font-size: 12px;
+  min-width: 100px;
+}
+
+.total-loan {
+  font-weight: 600;
+  background-color: #ffebee;
+}
+
+.reserve-value {
+  text-align: right;
+  font-family: 'Courier New', monospace;
+  color: #388e3c;
+  font-weight: 600;
+  min-width: 100px;
+}
+
+.capital, .share-count {
+  text-align: right;
+  font-family: 'Courier New', monospace;
+  color: #424242;
+  min-width: 100px;
+}
+
+/* 52-Week Range Styles */
+.range-52week {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+  min-width: 120px;
+}
+
+/* Price Position Visual Indicator */
+.price-position {
+  min-width: 150px;
+  padding: 8px !important;
+}
+
+.price-position-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.price-position-bar {
+  width: 100px;
+  height: 8px;
+  background: linear-gradient(to right, #28a745 0%, #ffc107 25%, #fd7e14 50%, #dc3545 75%, #dc3545 100%);
+  border-radius: 4px;
+  position: relative;
+  border: 1px solid #ddd;
+}
+
+.price-position-indicator {
+  position: absolute;
+  top: -2px;
+  width: 4px;
+  height: 12px;
+  background: #000;
+  border-radius: 2px;
+  transform: translateX(-50%);
+  transition: left 0.3s ease;
+}
+
+.price-position-text {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Price Position Color Classes */
+.price-position-excellent .price-position-text {
+  color: #28a745; /* Green - Near 52-week low */
+}
+
+.price-position-good .price-position-text {
+  color: #20c997; /* Teal */
+}
+
+.price-position-average .price-position-text {
+  color: #ffc107; /* Yellow */
+}
+
+.price-position-poor .price-position-text {
+  color: #fd7e14; /* Orange */
+}
+
+.price-position-very-poor .price-position-text {
+  color: #dc3545; /* Red - Near 52-week high */
+}
+
+@media (max-width: 768px) {
+  .dividend-table {
+    font-size: 11px;
+    min-width: 1900px; /* Increased for new columns */
+  }
+  
+  .dividend-table th,
+  .dividend-table td {
+    padding: 6px 4px;
+  }
+  
+  .company-name {
+    max-width: 150px;
+  }
+  
+  .price-position-bar {
+    width: 80px;
+    height: 6px;
+  }
+  
+  .price-position-indicator {
+    width: 3px;
+    height: 10px;
+  }
+}
+
+/* Shareholding Styles */
+.shareholding-value {
+  text-align: center;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  color: #333;
+  min-width: 100px;
+  padding: 8px 4px !important;
+}
+
+.shareholding-increase {
+  color: #28a745;
+  font-weight: 600;
+  display: block;
+  margin-top: 2px;
+}
+
+.shareholding-decrease {
+  color: #dc3545;
+  font-weight: 600;
+  display: block;
+  margin-top: 2px;
+}
+
+.shareholding-neutral {
+  color: #6c757d;
+  font-weight: 500;
+  display: block;
+  margin-top: 2px;
+}
+
+/* Financial Performance Change Indicators */
+.financial-performance-value {
+  color: #333;
+  min-width: 120px;
+  padding: 8px 4px !important;
+}
+
+.financial-increase {
+  color: #28a745;
+  font-weight: 600;
+  display: block;
+  margin-top: 2px;
+}
+
+.financial-decrease {
+  color: #dc3545;
+  font-weight: 600;
+  display: block;
+  margin-top: 2px;
+}
+
+.financial-neutral {
+  color: #6c757d;
+  font-weight: 500;
+  display: block;
+  margin-top: 2px;
+}
+
+@media (max-width: 768px) {
+  .dividend-table {
+    font-size: 11px;
+    min-width: 2500px; /* Increased for mobile with financial performance columns */
+  }
+  
+  .shareholding-value {
+    font-size: 11px;
+    min-width: 80px;
+    padding: 6px 2px !important;
+  }
+  
+  .shareholding-increase,
+  .shareholding-decrease,
+  .shareholding-neutral {
+    font-size: 10px;
+  }
+}
+
+/* P/E Ratio Styles */
+.pe-ratio-value {
+  text-align: center;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 80px;
+  padding: 8px 6px !important;
+}
+
+.pe-excellent {
+  color: #28a745;
+  background-color: rgba(40, 167, 69, 0.1);
+}
+
+.pe-good {
+  color: #20c997;
+  background-color: rgba(32, 201, 151, 0.1);
+}
+
+.pe-average {
+  color: #ffc107;
+  background-color: rgba(255, 193, 7, 0.1);
+}
+
+.pe-poor {
+  color: #fd7e14;
+  background-color: rgba(253, 126, 20, 0.1);
+}
+
+.pe-very-poor {
+  color: #dc3545;
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+.pe-none {
+  color: #6c757d;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .dividend-table {
+    font-size: 11px;
+    min-width: 2300px; /* Increased for mobile with PE ratio column */
+  }
+  
+  .pe-ratio-value {
+    font-size: 11px;
+    min-width: 60px;
+    padding: 6px 4px !important;
+  }
+}

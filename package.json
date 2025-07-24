@@ -1,0 +1,42 @@
+{
+  "name": "dse-financial-toolkit",
+  "version": "1.0.0",
+  "description": "A comprehensive financial toolkit for Dhaka Stock Exchange (DSE) analysis featuring automated data scraping, dividend tracking, financial health scoring, and interactive dashboards.",
+  "private": true,
+  "workspaces": [
+    "dse-scraper",
+    "nextjs-dividend-viewer"
+  ],
+  "scripts": {
+    "scraper:dev": "cd dse-scraper && bun run dev",
+    "scraper:build": "cd dse-scraper && bun run build",
+    "scraper:start": "cd dse-scraper && bun run start",
+    "scraper:scrape": "cd dse-scraper && bun run scrape",
+    "nextjs:dev": "cd nextjs-dividend-viewer && bun run dev",
+    "nextjs:build": "cd nextjs-dividend-viewer && bun run build",
+    "nextjs:start": "cd nextjs-dividend-viewer && bun run start",
+    "install:all": "bun install && cd dse-scraper && bun install && cd ../nextjs-dividend-viewer && bun install",
+    "dev": "bun run nextjs:dev",
+    "build:all": "bun run scraper:build && bun run nextjs:build"
+  },
+  "keywords": [
+    "dse",
+    "dhaka-stock-exchange",
+    "bangladesh",
+    "finance",
+    "dividends",
+    "stock-analysis",
+    "scraper",
+    "nextjs",
+    "react",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.18.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}

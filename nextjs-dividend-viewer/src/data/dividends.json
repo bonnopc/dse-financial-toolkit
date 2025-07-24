@@ -1,0 +1,118 @@
+[
+  {
+    "name": "BEXIMCO",
+    "fullName": "Bangladesh Export Import Company Ltd.",
+    "dividends": [
+      {
+        "year": 2020,
+        "cashDividend": 5,
+        "stockDividend": 0
+      },
+      {
+        "year": 2021,
+        "cashDividend": 35,
+        "stockDividend": 0
+      },
+      {
+        "year": 2022,
+        "cashDividend": 30,
+        "stockDividend": 0
+      },
+      {
+        "year": 2023,
+        "cashDividend": 10,
+        "stockDividend": 0
+      },
+      {
+        "year": 2024,
+        "cashDividend": 0,
+        "stockDividend": 5
+      }
+    ],
+    "loans": {
+      "shortTermMillion": 31091.72,
+      "longTermMillion": 33405.1,
+      "dateUpdated": "June 30, 2024"
+    },
+    "reserveAndIncome": {
+      "reserveInMillion": 75927.1,
+      "ociInMillion": -105.9
+    },
+    "metadata": {
+      "sector": "Miscellaneous",
+      "authorizedCapitalInMillion": 30000,
+      "paidUpCapitalInMillion": 9432.36,
+      "shareCount": 943235842
+    },
+    "priceInfo": {
+      "lastTradingPrice": 110.1,
+      "movingRangeFor52Weeks": {
+        "min": 110.1,
+        "max": 115.6
+      }
+    },
+    "financialPerformance": [
+      {
+        "year": 2020,
+        "profitInMillion": 446.18,
+        "earningsPerShare": 0.51,
+        "NAVPerShare": 69.33
+      },
+      {
+        "year": 2021,
+        "profitInMillion": 6600.61,
+        "earningsPerShare": 7.53,
+        "NAVPerShare": 78.28
+      },
+      {
+        "year": 2022,
+        "profitInMillion": 12547.86,
+        "earningsPerShare": 14.32,
+        "NAVPerShare": 91.19
+      },
+      {
+        "year": 2023,
+        "profitInMillion": 7101.77,
+        "earningsPerShare": 7.95,
+        "NAVPerShare": 96.94
+      },
+      {
+        "year": 2024,
+        "profitInMillion": -358.79,
+        "earningsPerShare": -0.4,
+        "NAVPerShare": 95.16
+      }
+    ],
+    "otherInfo": {
+      "listingYear": 1989,
+      "marketCategory": "B",
+      "shareHoldingParcentages": [
+        {
+          "date": "Jun 30, 2024",
+          "sponsorOrDirector": 33.11,
+          "government": 0,
+          "institution": 32.76,
+          "foreign": 0.94,
+          "publicShares": 33.19
+        },
+        {
+          "date": "May 31, 2025",
+          "sponsorOrDirector": 33.11,
+          "government": 0,
+          "institution": 32.52,
+          "foreign": 0.94,
+          "publicShares": 33.43
+        },
+        {
+          "date": "Jun 30, 2025",
+          "sponsorOrDirector": 33.11,
+          "government": 0,
+          "institution": 32.51,
+          "foreign": 0.94,
+          "publicShares": 33.44
+        }
+      ]
+    },
+    "unauditedPERatio": 0
+  }
+]
