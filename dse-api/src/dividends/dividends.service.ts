@@ -1,7 +1,7 @@
-import { DATABASE_CONNECTION } from '../database/database.module';
-import { Database } from '../database/schema';
 import { Inject, Injectable } from '@nestjs/common';
 import { Kysely } from 'kysely';
+import { DATABASE_CONNECTION } from '../database/database.module';
+import { Database } from '../database/schema';
 
 @Injectable()
 export class DividendsService {

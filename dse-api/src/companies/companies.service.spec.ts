@@ -1,10 +1,9 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { ConflictException, NotFoundException } from '@nestjs/common';
-import { CompaniesService } from './companies.service';
-import { FinancialScoringService } from './financial-scoring.service';
-import { CreateCompanyDto } from './dto/create-company.dto';
+import { Test, TestingModule } from '@nestjs/testing';
 import { DATABASE_CONNECTION } from '../database/database.module';
-import { Kysely } from 'kysely';
+import { CompaniesService } from './companies.service';
+import { CreateCompanyDto } from './dto/create-company.dto';
+import { FinancialScoringService } from './financial-scoring.service';
 
 describe('CompaniesService', () => {
   let service: CompaniesService;

@@ -1,8 +1,8 @@
-import { DATABASE_CONNECTION } from '../database/database.module';
-import { Database } from '../database/schema';
 import { ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Kysely } from 'kysely';
 import { PAGINATION_CONSTANTS } from '../constants/pagination.constants';
+import { DATABASE_CONNECTION } from '../database/database.module';
+import { Database } from '../database/schema';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { FinancialScoringService } from './financial-scoring.service';
 
