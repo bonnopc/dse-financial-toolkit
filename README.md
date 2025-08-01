@@ -23,7 +23,6 @@ dse-financial-toolkit/
 │ │ └── utils/ # Utility functions
 │ ├── package.json
 │ └── next.config.js
-├── dividends.json # Shared data file
 └── package.json # Root package.json
 ```
 

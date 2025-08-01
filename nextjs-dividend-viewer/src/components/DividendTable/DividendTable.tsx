@@ -9,7 +9,7 @@ interface DividendTableProps {
   companies: Company[];
 }
 
-type SortField = 'name' | 'sector' | 'year' | 'cashDividend' | 'stockDividend' | 'totalDividends' | 'paidUpCapital' | 'shareCount' | 'shortTermLoan' | 'longTermLoan' | 'totalLoan' | 'reserve' | 'financialScore' | 'lastTradingPrice' | 'dividendYield' | 'pricePosition' | 'weekRange52' | 'sponsorOrDirector' | 'government' | 'institution' | 'foreign' | 'publicShares' | 'peRatio' | 'latestProfit' | 'latestEPS' | 'latestNAV';
+type SortField = 'name' | 'sector' | 'year' | 'cashDividend' | 'stockDividend' | 'totalDividends' | 'paidUpCapital' | 'shareCount' | 'shortTermLoan' | 'longTermLoan' | 'totalLoan' | 'reserve' | 'financialScore' | 'lastTradingPrice' | 'dividendYield' | 'pricePosition' | 'peRatio' | 'latestProfit' | 'latestEPS' | 'latestNAV';
 type SortDirection = 'asc' | 'desc';
 
 const DividendTable: React.FC<DividendTableProps> = ({ companies }) => {
@@ -46,12 +46,20 @@ const DividendTable: React.FC<DividendTableProps> = ({ companies }) => {
     return sortedPerformance[0];
   };
 
+  // Helper function to safely convert values to numbers
+  const safeToNumber = (value: any): number => {
+    if (typeof value === 'number') return value;
+    if (typeof value === 'string') return parseFloat(value) || 0;
+    return 0;
+  };
+
   const getFinancialPerformanceChange = (company: Company, field: 'profitInMillion' | 'earningsPerShare' | 'NAVPerShare') => {
     const performances = company.financialPerformance;
     if (!performances || performances.length < 2) {
       const latest = getLatestFinancialPerformance(company);
+      const currentValue = latest ? latest[field] : 0;
       return { 
-        current: latest ? latest[field] : 0, 
+        current: safeToNumber(currentValue), 
         change: 0, 
         changePercent: 0 
       };
@@ -62,8 +70,8 @@ const DividendTable: React.FC<DividendTableProps> = ({ companies }) => {
     const latest = sortedPerformances[0];
     const previous = sortedPerformances[1];
     
-    const currentValue = latest[field];
-    const previousValue = previous[field];
+    const currentValue = safeToNumber(latest[field]);
+    const previousValue = safeToNumber(previous[field]);
     const change = currentValue - previousValue;
     const changePercent = previousValue !== 0 ? (change / previousValue) * 100 : 0;
 
@@ -86,15 +94,15 @@ const DividendTable: React.FC<DividendTableProps> = ({ companies }) => {
                        'financial-neutral';
     
     const displayValue = field === 'profitInMillion' 
-      ? data.current.toLocaleString() 
-      : data.current.toFixed(2);
+      ? safeToNumber(data.current).toLocaleString() 
+      : safeToNumber(data.current).toFixed(2);
     
     return (
       <span>
         {displayValue}{suffix}
         {data.change !== 0 && (
           <small className={changeClass}>
-            {' '}({data.changePercent > 0 ? '+' : ''}{data.changePercent.toFixed(1)}%)
+            {' '}({data.changePercent > 0 ? '+' : ''}{safeToNumber(data.changePercent).toFixed(1)}%)
           </small>
         )}
       </span>
@@ -102,7 +110,7 @@ const DividendTable: React.FC<DividendTableProps> = ({ companies }) => {
   };
 
   const getCurrentDividendYield = (company: Company) => {
-    if (company.dividends.length === 0 || !company.priceInfo?.lastTradingPrice || company.priceInfo.lastTradingPrice <= 0) {
+    if (company.dividends.length === 0 || !company.priceInfo?.lastTradingPrice || parseFloat(company.priceInfo.lastTradingPrice) <= 0) {
       return 0;
     }
     
@@ -115,15 +123,18 @@ const DividendTable: React.FC<DividendTableProps> = ({ companies }) => {
     const latestCashDividendAmount = (latestCashDividendPercentage / 100) * 10; // Face value is 10 taka
     
     // Calculate actual dividend yield as percentage (dividend amount in taka / share price * 100)
-    return (latestCashDividendAmount / company.priceInfo.lastTradingPrice) * 100;
+    return (latestCashDividendAmount / parseFloat(company.priceInfo.lastTradingPrice)) * 100;
   };
 
   const getPricePosition = (company: Company) => {
-    if (!company.priceInfo?.lastTradingPrice || !company.priceInfo?.movingRangeFor52Weeks) {
+    if (!company.priceInfo?.lastTradingPrice || 
+        !company.priceInfo?.movingRangeFor52Weeks ||
+        (company.priceInfo.movingRangeFor52Weeks.min === 0 && 
+         company.priceInfo.movingRangeFor52Weeks.max === 0)) {
       return 0;
     }
     
-    const currentPrice = company.priceInfo.lastTradingPrice;
+    const currentPrice = parseFloat(company.priceInfo.lastTradingPrice);
     const min52Week = company.priceInfo.movingRangeFor52Weeks.min;
     const max52Week = company.priceInfo.movingRangeFor52Weeks.max;
     
@@ -141,7 +152,9 @@ const DividendTable: React.FC<DividendTableProps> = ({ companies }) => {
   };
 
   const get52WeekRange = (company: Company) => {
-    if (!company.priceInfo?.movingRangeFor52Weeks) {
+    if (!company.priceInfo?.movingRangeFor52Weeks || 
+        (company.priceInfo.movingRangeFor52Weeks.min === 0 && 
+         company.priceInfo.movingRangeFor52Weeks.max === 0)) {
       return 'N/A';
     }
     const min = company.priceInfo.movingRangeFor52Weeks.min;
@@ -167,7 +180,16 @@ const DividendTable: React.FC<DividendTableProps> = ({ companies }) => {
 
   const getShareholdingChange = (company: Company, field: 'sponsorOrDirector' | 'government' | 'institution' | 'foreign' | 'publicShares') => {
     const shares = company.otherInfo?.shareHoldingParcentages;
-    if (!shares || shares.length < 2) {
+    // Check if we have no data or empty array
+    if (!shares || shares.length === 0) {
+      return { 
+        current: 0, 
+        change: 0, 
+        changePercent: 0 
+      };
+    }
+    
+    if (shares.length < 2) {
       const latest = getLatestShareholding(company);
       return { 
         current: latest ? latest[field] : 0, 
@@ -348,8 +370,8 @@ const DividendTable: React.FC<DividendTableProps> = ({ companies }) => {
           return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
           
         case 'lastTradingPrice':
-          aValue = a.priceInfo?.lastTradingPrice ?? 0;
-          bValue = b.priceInfo?.lastTradingPrice ?? 0;
+          aValue = parseFloat(a.priceInfo?.lastTradingPrice || '0');
+          bValue = parseFloat(b.priceInfo?.lastTradingPrice || '0');
           break;
           
         case 'dividendYield':
@@ -360,41 +382,6 @@ const DividendTable: React.FC<DividendTableProps> = ({ companies }) => {
         case 'pricePosition':
           aValue = getPricePosition(a);
           bValue = getPricePosition(b);
-          break;
-          
-        case 'weekRange52':
-          // Sort by range width (max - min)
-          const rangeA = a.priceInfo?.movingRangeFor52Weeks ? 
-            a.priceInfo.movingRangeFor52Weeks.max - a.priceInfo.movingRangeFor52Weeks.min : 0;
-          const rangeB = b.priceInfo?.movingRangeFor52Weeks ? 
-            b.priceInfo.movingRangeFor52Weeks.max - b.priceInfo.movingRangeFor52Weeks.min : 0;
-          aValue = rangeA;
-          bValue = rangeB;
-          break;
-          
-        case 'sponsorOrDirector':
-          aValue = getShareholdingChange(a, 'sponsorOrDirector').current;
-          bValue = getShareholdingChange(b, 'sponsorOrDirector').current;
-          break;
-          
-        case 'government':
-          aValue = getShareholdingChange(a, 'government').current;
-          bValue = getShareholdingChange(b, 'government').current;
-          break;
-          
-        case 'institution':
-          aValue = getShareholdingChange(a, 'institution').current;
-          bValue = getShareholdingChange(b, 'institution').current;
-          break;
-          
-        case 'foreign':
-          aValue = getShareholdingChange(a, 'foreign').current;
-          bValue = getShareholdingChange(b, 'foreign').current;
-          break;
-          
-        case 'publicShares':
-          aValue = getShareholdingChange(a, 'publicShares').current;
-          bValue = getShareholdingChange(b, 'publicShares').current;
           break;
           
         case 'peRatio':
@@ -456,7 +443,7 @@ const DividendTable: React.FC<DividendTableProps> = ({ companies }) => {
               <SortableHeader field="sector">Sector</SortableHeader>
               <SortableHeader field="financialScore">Health Score</SortableHeader>
               <SortableHeader field="lastTradingPrice">Last Trading Price (৳)</SortableHeader>
-              <SortableHeader field="weekRange52">52-Week Range (৳)</SortableHeader>
+              <th>52-Week Range (৳)</th>
               <SortableHeader field="pricePosition">Price Position (%)</SortableHeader>
               <SortableHeader field="dividendYield">Dividend Yield (%)</SortableHeader>
               <SortableHeader field="peRatio">P/E Ratio</SortableHeader>
@@ -473,11 +460,11 @@ const DividendTable: React.FC<DividendTableProps> = ({ companies }) => {
               <SortableHeader field="reserve">Reserve (M)</SortableHeader>
               <SortableHeader field="paidUpCapital">Paid Up Capital (M)</SortableHeader>
               <SortableHeader field="shareCount">Share Count</SortableHeader>
-              <SortableHeader field="sponsorOrDirector">Sponsor/Director (%)</SortableHeader>
-              <SortableHeader field="government">Government (%)</SortableHeader>
-              <SortableHeader field="institution">Institution (%)</SortableHeader>
-              <SortableHeader field="foreign">Foreign (%)</SortableHeader>
-              <SortableHeader field="publicShares">Public Shares (%)</SortableHeader>
+              <th>Sponsor/Director (%)</th>
+              <th>Government (%)</th>
+              <th>Institution (%)</th>
+              <th>Foreign (%)</th>
+              <th>Public Shares (%)</th>
             </tr>
           </thead>
         <tbody>
@@ -498,7 +485,7 @@ const DividendTable: React.FC<DividendTableProps> = ({ companies }) => {
                   />
                 </td>
                 <td className="price-value">
-                  ৳{company.priceInfo?.lastTradingPrice ? company.priceInfo.lastTradingPrice.toFixed(2) : 'N/A'}
+                  ৳{company.priceInfo?.lastTradingPrice ? parseFloat(company.priceInfo.lastTradingPrice).toFixed(2) : 'N/A'}
                 </td>
                 <td className="range-52week">
                   {get52WeekRange(company)}

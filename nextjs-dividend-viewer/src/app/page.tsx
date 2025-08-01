@@ -1,54 +1,38 @@
-'use client'
+'use client';
 
 import DividendTable from '@/components/DividendTable/DividendTable';
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
 import SectorFilter from '@/components/SectorFilter/SectorFilter';
-import dividendsData from '@/data/dividends.json';
-import { Company } from '@/types/Company';
-import { useEffect, useMemo, useState } from 'react';
+import { useCompanies, useSectors } from '@/hooks/useApiData';
+import { useState } from 'react';
 
 export default function Home() {
-  const [selectedSector, setSelectedSector] = useState<string>('All');
-  const [companies, setCompanies] = useState<Company[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedSector, setSelectedSector] = useState('All');
 
-  useEffect(() => {
-    // Simulate loading time for large dataset
-    const timer = setTimeout(() => {
-      setCompanies(dividendsData as Company[]);
-      setLoading(false);
-    }, 1000);
+  // Use React Query to fetch data
+  const { 
+    data: companies = [], 
+    isLoading: companiesLoading, 
+    error: companiesError,
+    refetch: refetchCompanies 
+  } = useCompanies({ 
+    sector: selectedSector !== 'All' ? selectedSector : undefined,
+    limit: 1000 // Fetch all companies
+  });
 
-    return () => clearTimeout(timer);
-  }, []);
+  const { 
+    data: sectors = [], 
+    isLoading: sectorsLoading 
+  } = useSectors();
 
-  // Get unique sectors from the data
-  const sectors = useMemo(() => {
-    const uniqueSectors = Array.from(new Set(companies.map(company => company.metadata.sector)));
-    return uniqueSectors.sort();
-  }, [companies]);
+  const isLoading = companiesLoading || sectorsLoading;
 
-  // Filter companies based on selected sector and search term
-  const filteredCompanies = useMemo(() => {
-    let filtered = companies;
-
-    // Filter by sector
-    if (selectedSector !== 'All') {
-      filtered = filtered.filter(company => company.metadata.sector === selectedSector);
-    }
-
-    // Filter by search term
-    if (searchTerm) {
-      const searchLower = searchTerm.toLowerCase();
-      filtered = filtered.filter(company => 
-        company.name.toLowerCase().includes(searchLower) ||
-        company.fullName.toLowerCase().includes(searchLower)
-      );
-    }
-
-    return filtered;
-  }, [companies, selectedSector, searchTerm]);
+  // Filter companies based on search term
+  const filteredCompanies = companies.filter(company =>
+    company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    company.fullName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const handleSectorChange = (sector: string) => {
     setSelectedSector(sector);
@@ -58,11 +42,44 @@ export default function Home() {
     setSearchTerm(term);
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="App">
         <div className="container">
           <LoadingSpinner />
+        </div>
+      </div>
+    );
+  }
+
+  if (companiesError) {
+    return (
+      <div className="App">
+        <div className="container">
+          <div className="error-message" style={{ 
+            padding: '20px', 
+            margin: '20px 0', 
+            backgroundColor: '#fee', 
+            border: '1px solid #fcc',
+            borderRadius: '4px',
+            color: '#c00'
+          }}>
+            <h3>Error loading data</h3>
+            <p>{companiesError instanceof Error ? companiesError.message : 'Failed to load company data'}</p>
+            <button 
+              onClick={() => refetchCompanies()}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: '#007bff',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer'
+              }}
+            >
+              Retry
+            </button>
+          </div>
         </div>
       </div>
     );

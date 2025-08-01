@@ -23,7 +23,7 @@ export interface Metadata {
 }
 
 export interface PriceInfo {
-  lastTradingPrice: number;
+  lastTradingPrice: string;
   movingRangeFor52Weeks: {
     min: number;
     max: number;

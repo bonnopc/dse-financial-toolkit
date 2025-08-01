@@ -18,6 +18,8 @@ export interface CompanyInfo {
     loans: CompanyLoan;
     reserveAndIncome: ReserveAndIncome;
     metadata: CompanyMetadata;
+    priceInfo: PriceInfo;
+    financialPerformance: FinancialPerformance[];
     otherInfo: OtherInfo;
     unauditedPERatio: number;
 }
