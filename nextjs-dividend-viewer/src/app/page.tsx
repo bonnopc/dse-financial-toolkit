@@ -11,27 +11,25 @@ export default function Home() {
   const [selectedSector, setSelectedSector] = useState('All');
 
   // Use React Query to fetch data
-  const { 
-    data: companies = [], 
-    isLoading: companiesLoading, 
+  const {
+    data: companies = [],
+    isLoading: companiesLoading,
     error: companiesError,
-    refetch: refetchCompanies 
-  } = useCompanies({ 
+    refetch: refetchCompanies,
+  } = useCompanies({
     sector: selectedSector !== 'All' ? selectedSector : undefined,
-    limit: 1000 // Fetch all companies
+    limit: 1000, // Fetch all companies
   });
 
-  const { 
-    data: sectors = [], 
-    isLoading: sectorsLoading 
-  } = useSectors();
+  const { data: sectors = [], isLoading: sectorsLoading } = useSectors();
 
   const isLoading = companiesLoading || sectorsLoading;
 
   // Filter companies based on search term
-  const filteredCompanies = companies.filter(company =>
-    company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    company.fullName.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredCompanies = companies.filter(
+    (company) =>
+      company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      company.fullName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleSectorChange = (sector: string) => {
@@ -56,17 +54,24 @@ export default function Home() {
     return (
       <div className="App">
         <div className="container">
-          <div className="error-message" style={{ 
-            padding: '20px', 
-            margin: '20px 0', 
-            backgroundColor: '#fee', 
-            border: '1px solid #fcc',
-            borderRadius: '4px',
-            color: '#c00'
-          }}>
+          <div
+            className="error-message"
+            style={{
+              padding: '20px',
+              margin: '20px 0',
+              backgroundColor: '#fee',
+              border: '1px solid #fcc',
+              borderRadius: '4px',
+              color: '#c00',
+            }}
+          >
             <h3>Error loading data</h3>
-            <p>{companiesError instanceof Error ? companiesError.message : 'Failed to load company data'}</p>
-            <button 
+            <p>
+              {companiesError instanceof Error
+                ? companiesError.message
+                : 'Failed to load company data'}
+            </p>
+            <button
               onClick={() => refetchCompanies()}
               style={{
                 padding: '8px 16px',
@@ -74,7 +79,7 @@ export default function Home() {
                 color: 'white',
                 border: 'none',
                 borderRadius: '4px',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               Retry

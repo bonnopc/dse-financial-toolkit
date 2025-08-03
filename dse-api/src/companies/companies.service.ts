@@ -1,4 +1,9 @@
-import { ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Kysely } from 'kysely';
 import { PAGINATION_CONSTANTS } from '../constants/pagination.constants';
 import { DATABASE_CONNECTION } from '../database/database.module';
@@ -11,12 +16,23 @@ export class CompaniesService {
   constructor(
     @Inject(DATABASE_CONNECTION)
     private readonly db: Kysely<Database>,
-    private readonly financialScoringService: FinancialScoringService,
+    private readonly financialScoringService: FinancialScoringService
   ) {}
 
   async createCompany(createCompanyDto: CreateCompanyDto) {
-    const { name, fullName, dividends, loans, reserveAndIncome, metadata, priceInfo, financialPerformance, otherInfo, unauditedPERatio } = createCompanyDto;
-    
+    const {
+      name,
+      fullName,
+      dividends,
+      loans,
+      reserveAndIncome,
+      metadata,
+      priceInfo,
+      financialPerformance,
+      otherInfo,
+      unauditedPERatio,
+    } = createCompanyDto;
+
     return await this.db.transaction().execute(async (trx) => {
       // Check if company already exists
       const existingCompany = await trx
@@ -50,7 +66,7 @@ export class CompaniesService {
         await trx
           .insertInto('dividends')
           .values(
-            dividends.map(dividend => ({
+            dividends.map((dividend) => ({
               company_id: company.id,
               year: dividend.year,
               cash_dividend: dividend.cashDividend,
@@ -81,7 +97,8 @@ export class CompaniesService {
         .values({
           company_id: company.id,
           reserve_million: reserveAndIncome.reserveMillion,
-          unappropriated_profit_million: reserveAndIncome.unappropriatedProfitMillion,
+          unappropriated_profit_million:
+            reserveAndIncome.unappropriatedProfitMillion,
           date_updated: reserveAndIncome.dateUpdated,
           created_at: new Date(),
           updated_at: new Date(),
@@ -124,11 +141,12 @@ export class CompaniesService {
         await trx
           .insertInto('financial_performance')
           .values(
-            financialPerformance.map(perf => ({
+            financialPerformance.map((perf) => ({
               company_id: company.id,
               year: perf.year,
               earnings_per_share: perf.earningsPerShare,
-              net_operating_cash_flow_per_share: perf.netOperatingCashFlowPerShare,
+              net_operating_cash_flow_per_share:
+                perf.netOperatingCashFlowPerShare,
               net_asset_value_per_share: perf.netAssetValuePerShare,
               created_at: new Date(),
               updated_at: new Date(),
@@ -138,11 +156,14 @@ export class CompaniesService {
       }
 
       // Insert shareholding percentages
-      if (otherInfo.shareHoldingParcentages && otherInfo.shareHoldingParcentages.length > 0) {
+      if (
+        otherInfo.shareHoldingParcentages &&
+        otherInfo.shareHoldingParcentages.length > 0
+      ) {
         await trx
           .insertInto('shareholding_percentages')
           .values(
-            otherInfo.shareHoldingParcentages.map(shareholding => ({
+            otherInfo.shareHoldingParcentages.map((shareholding) => ({
               company_id: company.id,
               date_recorded: new Date(shareholding.date),
               sponsor_or_director: shareholding.sponsorOrDirector,
@@ -172,8 +193,19 @@ export class CompaniesService {
   }
 
   async upsertCompany(createCompanyDto: CreateCompanyDto) {
-    const { name, fullName, dividends, loans, reserveAndIncome, metadata, priceInfo, financialPerformance, otherInfo, unauditedPERatio } = createCompanyDto;
-    
+    const {
+      name,
+      fullName,
+      dividends,
+      loans,
+      reserveAndIncome,
+      metadata,
+      priceInfo,
+      financialPerformance,
+      otherInfo,
+      unauditedPERatio,
+    } = createCompanyDto;
+
     return await this.db.transaction().execute(async (trx) => {
       // Check if company already exists
       let company = await trx
@@ -206,11 +238,26 @@ export class CompaniesService {
 
         // Delete existing related data to replace with fresh data
         await Promise.all([
-          trx.deleteFrom('dividends').where('company_id', '=', company.id).execute(),
-          trx.deleteFrom('company_loans').where('company_id', '=', company.id).execute(),
-          trx.deleteFrom('company_reserves').where('company_id', '=', company.id).execute(),
-          trx.deleteFrom('financial_performance').where('company_id', '=', company.id).execute(),
-          trx.deleteFrom('shareholding_percentages').where('company_id', '=', company.id).execute(),
+          trx
+            .deleteFrom('dividends')
+            .where('company_id', '=', company.id)
+            .execute(),
+          trx
+            .deleteFrom('company_loans')
+            .where('company_id', '=', company.id)
+            .execute(),
+          trx
+            .deleteFrom('company_reserves')
+            .where('company_id', '=', company.id)
+            .execute(),
+          trx
+            .deleteFrom('financial_performance')
+            .where('company_id', '=', company.id)
+            .execute(),
+          trx
+            .deleteFrom('shareholding_percentages')
+            .where('company_id', '=', company.id)
+            .execute(),
         ]);
 
         // Update metadata and price info (these are single records)
@@ -225,7 +272,7 @@ export class CompaniesService {
             })
             .where('company_id', '=', company.id)
             .execute(),
-          
+
           trx
             .updateTable('price_info')
             .set({
@@ -242,7 +289,6 @@ export class CompaniesService {
             .where('company_id', '=', company.id)
             .execute(),
         ]);
-
       } else {
         // Create new company
         company = await trx
@@ -258,9 +304,18 @@ export class CompaniesService {
             updated_at: new Date(),
           })
           .returning([
-            'id', 'code', 'full_name', 'sector', 'listing_year', 'market_category', 
-            'unaudited_pe_ratio', 'financial_score', 'financial_score_components', 
-            'financial_score_calculated_at', 'created_at', 'updated_at'
+            'id',
+            'code',
+            'full_name',
+            'sector',
+            'listing_year',
+            'market_category',
+            'unaudited_pe_ratio',
+            'financial_score',
+            'financial_score_components',
+            'financial_score_calculated_at',
+            'created_at',
+            'updated_at',
           ])
           .executeTakeFirstOrThrow();
 
@@ -302,7 +357,7 @@ export class CompaniesService {
         await trx
           .insertInto('dividends')
           .values(
-            dividends.map(dividend => ({
+            dividends.map((dividend) => ({
               company_id: company.id,
               year: dividend.year,
               cash_dividend: dividend.cashDividend,
@@ -333,7 +388,8 @@ export class CompaniesService {
         .values({
           company_id: company.id,
           reserve_million: reserveAndIncome.reserveMillion,
-          unappropriated_profit_million: reserveAndIncome.unappropriatedProfitMillion,
+          unappropriated_profit_million:
+            reserveAndIncome.unappropriatedProfitMillion,
           date_updated: reserveAndIncome.dateUpdated,
           created_at: new Date(),
           updated_at: new Date(),
@@ -345,11 +401,12 @@ export class CompaniesService {
         await trx
           .insertInto('financial_performance')
           .values(
-            financialPerformance.map(perf => ({
+            financialPerformance.map((perf) => ({
               company_id: company.id,
               year: perf.year,
               earnings_per_share: perf.earningsPerShare,
-              net_operating_cash_flow_per_share: perf.netOperatingCashFlowPerShare,
+              net_operating_cash_flow_per_share:
+                perf.netOperatingCashFlowPerShare,
               net_asset_value_per_share: perf.netAssetValuePerShare,
               created_at: new Date(),
               updated_at: new Date(),
@@ -359,11 +416,14 @@ export class CompaniesService {
       }
 
       // Insert shareholding percentages
-      if (otherInfo.shareHoldingParcentages && otherInfo.shareHoldingParcentages.length > 0) {
+      if (
+        otherInfo.shareHoldingParcentages &&
+        otherInfo.shareHoldingParcentages.length > 0
+      ) {
         await trx
           .insertInto('shareholding_percentages')
           .values(
-            otherInfo.shareHoldingParcentages.map(shareholding => ({
+            otherInfo.shareHoldingParcentages.map((shareholding) => ({
               company_id: company.id,
               date_recorded: new Date(shareholding.date),
               sponsor_or_director: shareholding.sponsorOrDirector,
@@ -396,10 +456,18 @@ export class CompaniesService {
     // Fetch company data needed for scoring
     const companyData = await trx
       .selectFrom('companies')
-      .leftJoin('company_metadata', 'companies.id', 'company_metadata.company_id')
+      .leftJoin(
+        'company_metadata',
+        'companies.id',
+        'company_metadata.company_id'
+      )
       .leftJoin('price_info', 'companies.id', 'price_info.company_id')
       .leftJoin('company_loans', 'companies.id', 'company_loans.company_id')
-      .leftJoin('company_reserves', 'companies.id', 'company_reserves.company_id')
+      .leftJoin(
+        'company_reserves',
+        'companies.id',
+        'company_reserves.company_id'
+      )
       .select([
         'companies.id',
         'companies.code',
@@ -437,17 +505,28 @@ export class CompaniesService {
         .where('company_id', '=', companyId)
         .orderBy('year', 'desc')
         .execute(),
-      
+
       trx
         .selectFrom('financial_performance')
-        .select(['year', 'earnings_per_share', 'net_operating_cash_flow_per_share', 'net_asset_value_per_share'])
+        .select([
+          'year',
+          'earnings_per_share',
+          'net_operating_cash_flow_per_share',
+          'net_asset_value_per_share',
+        ])
         .where('company_id', '=', companyId)
         .orderBy('year', 'desc')
         .execute(),
-      
+
       trx
         .selectFrom('shareholding_percentages')
-        .select(['sponsor_or_director', 'government', 'institution', 'foreign_ownership', 'public_shares'])
+        .select([
+          'sponsor_or_director',
+          'government',
+          'institution',
+          'foreign_ownership',
+          'public_shares',
+        ])
         .where('company_id', '=', companyId)
         .orderBy('date_recorded', 'desc')
         .limit(1)
@@ -467,25 +546,32 @@ export class CompaniesService {
         min: companyData.week_52_min || 0,
         max: companyData.week_52_max || 0,
       },
-      dividends: dividends?.map(d => ({
-        year: d.year,
-        cashDividend: d.cash_dividend || 0,
-        stockDividend: d.stock_dividend || 0,
-      })) || [],
-      financialPerformance: financialPerformance?.map(f => ({
-        year: f.year,
-        earningsPerShare: f.earnings_per_share || 0,
-      })) || [],
-      shareholdingPercentages: shareholding ? [{
-        date: new Date().toISOString(),
-        sponsorOrDirector: shareholding.sponsor_or_director || 0,
-        institution: shareholding.institution || 0,
-        foreign: shareholding.foreign_ownership || 0,
-      }] : [],
+      dividends:
+        dividends?.map((d) => ({
+          year: d.year,
+          cashDividend: d.cash_dividend || 0,
+          stockDividend: d.stock_dividend || 0,
+        })) || [],
+      financialPerformance:
+        financialPerformance?.map((f) => ({
+          year: f.year,
+          earningsPerShare: f.earnings_per_share || 0,
+        })) || [],
+      shareholdingPercentages: shareholding
+        ? [
+            {
+              date: new Date().toISOString(),
+              sponsorOrDirector: shareholding.sponsor_or_director || 0,
+              institution: shareholding.institution || 0,
+              foreign: shareholding.foreign_ownership || 0,
+            },
+          ]
+        : [],
     };
 
     // Calculate financial score
-    const scoreResult = this.financialScoringService.calculateFinancialScore(transformedCompany);
+    const scoreResult =
+      this.financialScoringService.calculateFinancialScore(transformedCompany);
 
     // Store the financial score
     await trx
@@ -500,13 +586,25 @@ export class CompaniesService {
       .execute();
   }
 
-  async findAll(sector?: string, limit: number = PAGINATION_CONSTANTS.MAX_LIMIT, offset: number = PAGINATION_CONSTANTS.DEFAULT_OFFSET) {
+  async findAll(
+    sector?: string,
+    limit: number = PAGINATION_CONSTANTS.MAX_LIMIT,
+    offset: number = PAGINATION_CONSTANTS.DEFAULT_OFFSET
+  ) {
     let query = this.db
       .selectFrom('companies')
-      .leftJoin('company_metadata', 'companies.id', 'company_metadata.company_id')
+      .leftJoin(
+        'company_metadata',
+        'companies.id',
+        'company_metadata.company_id'
+      )
       .leftJoin('price_info', 'companies.id', 'price_info.company_id')
       .leftJoin('company_loans', 'companies.id', 'company_loans.company_id')
-      .leftJoin('company_reserves', 'companies.id', 'company_reserves.company_id')
+      .leftJoin(
+        'company_reserves',
+        'companies.id',
+        'company_reserves.company_id'
+      )
       .select([
         // Companies table
         'companies.id',
@@ -524,7 +622,7 @@ export class CompaniesService {
         // Company metadata
         'company_metadata.company_id',
         'company_metadata.authorized_capital_million',
-        'company_metadata.paid_up_capital_million', 
+        'company_metadata.paid_up_capital_million',
         'company_metadata.share_count',
         // Price info
         'price_info.last_trading_price',
@@ -541,23 +639,22 @@ export class CompaniesService {
         'company_loans.long_term_million',
         // Company reserves
         'company_reserves.reserve_million',
-        'company_reserves.unappropriated_profit_million'
+        'company_reserves.unappropriated_profit_million',
       ]);
 
     if (sector) {
       query = query.where('companies.sector', '=', sector);
     }
 
-    const companies = await query
-      .limit(limit)
-      .offset(offset)
-      .execute();
+    const companies = await query.limit(limit).offset(offset).execute();
 
     // Fetch related data for each company
     const companiesWithRelatedData = await Promise.all(
       companies.map(async (company) => {
-        console.log(`Fetching related data for company ID: ${company.id}, Code: ${company.code}`);
-        
+        console.log(
+          `Fetching related data for company ID: ${company.id}, Code: ${company.code}`
+        );
+
         // Get dividends
         const dividends = await this.db
           .selectFrom('dividends')
@@ -576,7 +673,9 @@ export class CompaniesService {
           .orderBy('year', 'desc')
           .execute();
 
-        console.log(`Found ${financialPerformance.length} financial records for ${company.code}`);
+        console.log(
+          `Found ${financialPerformance.length} financial records for ${company.code}`
+        );
 
         // Get shareholding percentages
         const shareholdingData = await this.db
@@ -586,7 +685,9 @@ export class CompaniesService {
           .orderBy('date_recorded', 'desc')
           .execute();
 
-        console.log(`Found ${shareholdingData.length} shareholding records for ${company.code}`);
+        console.log(
+          `Found ${shareholdingData.length} shareholding records for ${company.code}`
+        );
 
         return {
           ...company,
@@ -595,8 +696,9 @@ export class CompaniesService {
           shareholding_percentages: shareholdingData,
           // Financial score is now included in the main query
           financial_score: company.financial_score,
-          financial_score_components: company.financial_score_components ? 
-            JSON.parse(company.financial_score_components) : null,
+          financial_score_components: company.financial_score_components
+            ? JSON.parse(company.financial_score_components)
+            : null,
           financial_score_calculated_at: company.financial_score_calculated_at,
         };
       })
@@ -617,13 +719,44 @@ export class CompaniesService {
     }
 
     // Get related data
-    const [dividends, loans, reserves, metadata, priceInfo, financialPerformance] = await Promise.all([
-      this.db.selectFrom('dividends').where('company_id', '=', company.id).selectAll().execute(),
-      this.db.selectFrom('company_loans').where('company_id', '=', company.id).selectAll().executeTakeFirst(),
-      this.db.selectFrom('company_reserves').where('company_id', '=', company.id).selectAll().executeTakeFirst(),
-      this.db.selectFrom('company_metadata').where('company_id', '=', company.id).selectAll().executeTakeFirst(),
-      this.db.selectFrom('price_info').where('company_id', '=', company.id).selectAll().executeTakeFirst(),
-      this.db.selectFrom('financial_performance').where('company_id', '=', company.id).selectAll().execute(),
+    const [
+      dividends,
+      loans,
+      reserves,
+      metadata,
+      priceInfo,
+      financialPerformance,
+    ] = await Promise.all([
+      this.db
+        .selectFrom('dividends')
+        .where('company_id', '=', company.id)
+        .selectAll()
+        .execute(),
+      this.db
+        .selectFrom('company_loans')
+        .where('company_id', '=', company.id)
+        .selectAll()
+        .executeTakeFirst(),
+      this.db
+        .selectFrom('company_reserves')
+        .where('company_id', '=', company.id)
+        .selectAll()
+        .executeTakeFirst(),
+      this.db
+        .selectFrom('company_metadata')
+        .where('company_id', '=', company.id)
+        .selectAll()
+        .executeTakeFirst(),
+      this.db
+        .selectFrom('price_info')
+        .where('company_id', '=', company.id)
+        .selectAll()
+        .executeTakeFirst(),
+      this.db
+        .selectFrom('financial_performance')
+        .where('company_id', '=', company.id)
+        .selectAll()
+        .execute(),
     ]);
 
     return {
@@ -645,6 +778,6 @@ export class CompaniesService {
       .groupBy('sector')
       .execute();
 
-    return sectors.map(s => s.sector).filter(Boolean);
+    return sectors.map((s) => s.sector).filter(Boolean);
   }
 }

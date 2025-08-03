@@ -73,11 +73,11 @@
     align-items: stretch;
     gap: 16px;
   }
-  
+
   .filter-section {
     align-items: flex-start;
   }
-  
+
   .sector-select {
     width: 100%;
     min-width: auto;

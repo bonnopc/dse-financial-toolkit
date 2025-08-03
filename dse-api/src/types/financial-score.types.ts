@@ -26,7 +26,7 @@ export interface CompanyWithScore {
   unaudited_pe_ratio?: number;
   created_at: string;
   updated_at: string;
-  
+
   // Price information
   last_trading_price?: number;
   change_amount?: number;
@@ -36,21 +36,21 @@ export interface CompanyWithScore {
   trade_count?: number;
   week_52_min?: number;
   week_52_max?: number;
-  
+
   // Company metadata
   authorized_capital_million?: number;
   paid_up_capital_million?: number;
   share_count?: number;
-  
+
   // Loan information
   short_term_million?: number;
   long_term_million?: number;
   date_updated?: string;
-  
+
   // Reserve information
   reserve_million?: number;
   unappropriated_profit_million?: number;
-  
+
   // Related data arrays
   dividends?: Array<{
     id: number;
@@ -61,7 +61,7 @@ export interface CompanyWithScore {
     created_at: string;
     updated_at: string;
   }>;
-  
+
   financial_performance?: Array<{
     id: number;
     company_id: number;
@@ -72,7 +72,7 @@ export interface CompanyWithScore {
     created_at: string;
     updated_at: string;
   }>;
-  
+
   shareholding_percentages?: Array<{
     id: number;
     company_id: number;
@@ -85,7 +85,7 @@ export interface CompanyWithScore {
     created_at: string;
     updated_at: string;
   }>;
-  
+
   // Financial score (calculated)
   financial_score?: FinancialScore;
 }

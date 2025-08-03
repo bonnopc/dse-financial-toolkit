@@ -1,4 +1,3 @@
-
 // Global test setup
 beforeAll(async () => {
   // Any global setup can go here

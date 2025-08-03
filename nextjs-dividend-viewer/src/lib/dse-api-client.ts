@@ -13,7 +13,7 @@ export interface ApiCompany {
   unaudited_pe_ratio?: string;
   created_at: string;
   updated_at: string;
-  
+
   // Price information (nullable from left join)
   last_trading_price?: number;
   change_amount?: number;
@@ -23,21 +23,21 @@ export interface ApiCompany {
   trade_count?: number;
   week_52_min?: number;
   week_52_max?: number;
-  
+
   // Company metadata (nullable from left join)
   authorized_capital_million?: number;
   paid_up_capital_million?: number;
   share_count?: number;
-  
+
   // Loan information (nullable from left join)
   short_term_million?: number;
   long_term_million?: number;
   date_updated?: string;
-  
+
   // Reserve information (nullable from left join)
   reserve_million?: number;
   unappropriated_profit_million?: number;
-  
+
   // Related data arrays
   dividends?: ApiDividend[];
   financial_performance?: ApiFinancialPerformance[];
@@ -82,7 +82,8 @@ class DSEApiClient {
   private baseURL: string;
 
   constructor() {
-    this.baseURL = process.env.NEXT_PUBLIC_DSE_API_URL || 'http://localhost:3001/api/v1';
+    this.baseURL =
+      process.env.NEXT_PUBLIC_DSE_API_URL || 'http://localhost:3001/api/v1';
   }
 
   async getCompanies(params?: {
@@ -104,7 +105,7 @@ class DSEApiClient {
 
       const url = `${this.baseURL}/companies${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
       const response = await fetch(url);
-      
+
       if (!response.ok) {
         throw new Error(`Failed to fetch companies: ${response.statusText}`);
       }
@@ -119,9 +120,11 @@ class DSEApiClient {
   async getCompanyByCode(code: string): Promise<ApiCompany> {
     try {
       const response = await fetch(`${this.baseURL}/companies/${code}`);
-      
+
       if (!response.ok) {
-        throw new Error(`Failed to fetch company ${code}: ${response.statusText}`);
+        throw new Error(
+          `Failed to fetch company ${code}: ${response.statusText}`
+        );
       }
 
       return await response.json();

@@ -1,6 +1,12 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsArray, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsNumber,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 
 export class DividendDto {
   @ApiProperty({ description: 'Dividend year' })
@@ -142,7 +148,9 @@ export class ShareholdingPercentageDto {
   @IsString()
   date: string;
 
-  @ApiPropertyOptional({ description: 'Sponsor or director shareholding percentage' })
+  @ApiPropertyOptional({
+    description: 'Sponsor or director shareholding percentage',
+  })
   @IsOptional()
   @IsNumber()
   sponsorOrDirector?: number;
@@ -189,7 +197,10 @@ export class OtherInfoDto {
   @IsNumber()
   listingYear?: number;
 
-  @ApiPropertyOptional({ description: 'Shareholding percentages', type: [ShareholdingPercentageDto] })
+  @ApiPropertyOptional({
+    description: 'Shareholding percentages',
+    type: [ShareholdingPercentageDto],
+  })
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
@@ -233,7 +244,10 @@ export class CreateCompanyDto {
   @Type(() => PriceInfoDto)
   priceInfo: PriceInfoDto;
 
-  @ApiProperty({ description: 'Financial performance data', type: [FinancialPerformanceDto] })
+  @ApiProperty({
+    description: 'Financial performance data',
+    type: [FinancialPerformanceDto],
+  })
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => FinancialPerformanceDto)

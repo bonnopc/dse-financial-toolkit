@@ -217,7 +217,8 @@
   min-width: 100px;
 }
 
-.capital, .share-count {
+.capital,
+.share-count {
   text-align: right;
   font-family: 'Courier New', monospace;
   color: #424242;
@@ -249,7 +250,14 @@
 .price-position-bar {
   width: 100px;
   height: 8px;
-  background: linear-gradient(to right, #28a745 0%, #ffc107 25%, #fd7e14 50%, #dc3545 75%, #dc3545 100%);
+  background: linear-gradient(
+    to right,
+    #28a745 0%,
+    #ffc107 25%,
+    #fd7e14 50%,
+    #dc3545 75%,
+    #dc3545 100%
+  );
   border-radius: 4px;
   position: relative;
   border: 1px solid #ddd;
@@ -297,21 +305,21 @@
     font-size: 11px;
     min-width: 1900px; /* Increased for new columns */
   }
-  
+
   .dividend-table th,
   .dividend-table td {
     padding: 6px 4px;
   }
-  
+
   .company-name {
     max-width: 150px;
   }
-  
+
   .price-position-bar {
     width: 80px;
     height: 6px;
   }
-  
+
   .price-position-indicator {
     width: 3px;
     height: 10px;
@@ -382,13 +390,13 @@
     font-size: 11px;
     min-width: 2500px; /* Increased for mobile with financial performance columns */
   }
-  
+
   .shareholding-value {
     font-size: 11px;
     min-width: 80px;
     padding: 6px 2px !important;
   }
-  
+
   .shareholding-increase,
   .shareholding-decrease,
   .shareholding-neutral {
@@ -441,7 +449,7 @@
     font-size: 11px;
     min-width: 2300px; /* Increased for mobile with PE ratio column */
   }
-  
+
   .pe-ratio-value {
     font-size: 11px;
     min-width: 60px;

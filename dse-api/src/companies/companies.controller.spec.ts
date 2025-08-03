@@ -65,7 +65,11 @@ describe('CompaniesController', () => {
 
       const result = await controller.findAll('Technology');
       expect(result).toEqual(mockCompanies);
-      expect(service.findAll).toHaveBeenCalledWith('Technology', undefined, undefined);
+      expect(service.findAll).toHaveBeenCalledWith(
+        'Technology',
+        undefined,
+        undefined
+      );
     });
   });
 

@@ -39,13 +39,15 @@ export function useSectors() {
   // Derive sectors from companies data
   const sectors = useMemo(() => {
     if (!companiesQuery.data) return [];
-    
-    const uniqueSectors = Array.from(new Set(
-      companiesQuery.data
-        .map(company => company.metadata.sector)
-        .filter(sector => sector && sector.trim() !== '')
-    )) as string[];
-    
+
+    const uniqueSectors = Array.from(
+      new Set(
+        companiesQuery.data
+          .map((company) => company.metadata.sector)
+          .filter((sector) => sector && sector.trim() !== '')
+      )
+    ) as string[];
+
     return uniqueSectors.sort();
   }, [companiesQuery.data]);
 

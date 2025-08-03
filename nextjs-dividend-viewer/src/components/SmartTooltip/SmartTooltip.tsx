@@ -8,41 +8,55 @@ interface SmartTooltipProps {
   maxWidth?: number;
 }
 
-type TooltipPosition = 'right-top' | 'right-bottom' | 'left-top' | 'left-bottom';
+type TooltipPosition =
+  | 'right-top'
+  | 'right-bottom'
+  | 'left-top'
+  | 'left-bottom';
 
-const SmartTooltip: React.FC<SmartTooltipProps> = ({ 
-  children, 
-  tooltip, 
+const SmartTooltip: React.FC<SmartTooltipProps> = ({
+  children,
+  tooltip,
   className = '',
-  maxWidth = 350
+  maxWidth = 350,
 }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [isPositioned, setIsPositioned] = useState(false);
-  const [position, setPosition] = useState({ top: 0, left: 0, placement: 'right-top' as TooltipPosition });
+  const [position, setPosition] = useState({
+    top: 0,
+    left: 0,
+    placement: 'right-top' as TooltipPosition,
+  });
   const containerRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
-  const calculateBestPosition = (): { top: number; left: number; placement: TooltipPosition } => {
-    if (!containerRef.current) return { top: 0, left: 0, placement: 'right-top' };
-    
+  const calculateBestPosition = (): {
+    top: number;
+    left: number;
+    placement: TooltipPosition;
+  } => {
+    if (!containerRef.current)
+      return { top: 0, left: 0, placement: 'right-top' };
+
     const rect = containerRef.current.getBoundingClientRect();
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
-    
+
     // Get actual tooltip height, or use estimated height if not available yet
-    const tooltipHeight = tooltipRef.current?.getBoundingClientRect().height || 200;
+    const tooltipHeight =
+      tooltipRef.current?.getBoundingClientRect().height || 200;
     const gap = 10;
-    
+
     // Check available space in all directions
     const spaceRight = viewportWidth - rect.right;
     const spaceLeft = rect.left;
     const spaceBelow = viewportHeight - rect.bottom;
     const spaceAbove = rect.top;
-    
+
     // Determine horizontal placement (left vs right)
     const preferRight = spaceRight >= maxWidth + gap;
     const canFitLeft = spaceLeft >= maxWidth + gap;
-    
+
     let horizontal: 'left' | 'right';
     if (preferRight) {
       horizontal = 'right';
@@ -52,11 +66,11 @@ const SmartTooltip: React.FC<SmartTooltipProps> = ({
       // Choose the side with more space
       horizontal = spaceRight > spaceLeft ? 'right' : 'left';
     }
-    
+
     // Determine vertical placement (top vs bottom)
     const preferBottom = spaceBelow >= tooltipHeight;
     const canFitTop = spaceAbove >= tooltipHeight;
-    
+
     let vertical: 'top' | 'bottom';
     if (preferBottom) {
       vertical = 'top'; // tooltip positioned from top of trigger (growing downward)
@@ -66,29 +80,30 @@ const SmartTooltip: React.FC<SmartTooltipProps> = ({
       // Choose the side with more space
       vertical = spaceBelow > spaceAbove ? 'top' : 'bottom';
     }
-    
+
     // Calculate final position
     let left: number;
     let top: number;
-    
+
     if (horizontal === 'right') {
       left = rect.right + gap;
     } else {
       left = rect.left - maxWidth - gap;
     }
-    
+
     if (vertical === 'top') {
       top = rect.top;
     } else {
       top = rect.bottom - tooltipHeight;
     }
-    
+
     // Ensure tooltip stays within viewport bounds
     left = Math.max(gap, Math.min(left, viewportWidth - maxWidth - gap));
     top = Math.max(gap, Math.min(top, viewportHeight - tooltipHeight - gap));
-    
-    const placement: TooltipPosition = `${horizontal}-${vertical}` as TooltipPosition;
-    
+
+    const placement: TooltipPosition =
+      `${horizontal}-${vertical}` as TooltipPosition;
+
     return { top, left, placement };
   };
 
@@ -106,7 +121,8 @@ const SmartTooltip: React.FC<SmartTooltipProps> = ({
   const tooltipCallbackRef = (element: HTMLDivElement | null) => {
     if (element && !isPositioned) {
       // Update the ref manually
-      (tooltipRef as React.MutableRefObject<HTMLDivElement | null>).current = element;
+      (tooltipRef as React.MutableRefObject<HTMLDivElement | null>).current =
+        element;
       // Calculate position immediately now that we have the element
       const newPosition = calculateBestPosition();
       setPosition(newPosition);
@@ -131,16 +147,16 @@ const SmartTooltip: React.FC<SmartTooltipProps> = ({
   }, [showTooltip, isPositioned, maxWidth]);
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className={`smart-tooltip-container ${className}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       {children}
-      
+
       {showTooltip && (
-        <div 
+        <div
           ref={tooltipCallbackRef}
           className={`smart-tooltip smart-tooltip-${position.placement}`}
           style={{
@@ -150,12 +166,10 @@ const SmartTooltip: React.FC<SmartTooltipProps> = ({
             maxWidth: maxWidth,
             zIndex: 10000,
             opacity: isPositioned ? 1 : 0,
-            visibility: isPositioned ? 'visible' : 'hidden'
+            visibility: isPositioned ? 'visible' : 'hidden',
           }}
         >
-          <div className="smart-tooltip-content">
-            {tooltip}
-          </div>
+          <div className="smart-tooltip-content">{tooltip}</div>
         </div>
       )}
     </div>

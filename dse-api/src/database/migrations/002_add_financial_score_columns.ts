@@ -2,7 +2,7 @@ import { Kysely, sql } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
   console.log('Adding financial score columns...');
-  
+
   // Add only the financial score columns (other columns seem to already exist)
   try {
     await db.schema

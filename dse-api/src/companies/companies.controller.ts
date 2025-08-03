@@ -7,9 +7,15 @@ import {
   ParseIntPipe,
   Post,
   Put,
-  Query
+  Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { PAGINATION_CONSTANTS } from '../constants/pagination.constants';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -29,7 +35,10 @@ export class CompaniesController {
 
   @Put('upsert')
   @ApiOperation({ summary: 'Create or update a company (upsert)' })
-  @ApiResponse({ status: 200, description: 'Company created or updated successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Company created or updated successfully',
+  })
   @ApiResponse({ status: 400, description: 'Invalid company data' })
   upsert(@Body() createCompanyDto: CreateCompanyDto) {
     return this.companiesService.upsertCompany(createCompanyDto);
@@ -37,14 +46,36 @@ export class CompaniesController {
 
   @Get()
   @ApiOperation({ summary: 'Get all companies' })
-  @ApiQuery({ name: 'sector', required: false, description: 'Filter by sector' })
-  @ApiQuery({ name: 'limit', required: false, description: 'Number of results to return' })
-  @ApiQuery({ name: 'offset', required: false, description: 'Number of results to skip' })
+  @ApiQuery({
+    name: 'sector',
+    required: false,
+    description: 'Filter by sector',
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    description: 'Number of results to return',
+  })
+  @ApiQuery({
+    name: 'offset',
+    required: false,
+    description: 'Number of results to skip',
+  })
   @ApiResponse({ status: 200, description: 'List of companies' })
   findAll(
     @Query('sector') sector?: string,
-    @Query('limit', new DefaultValuePipe(PAGINATION_CONSTANTS.DEFAULT_LIMIT), ParseIntPipe) limit?: number,
-    @Query('offset', new DefaultValuePipe(PAGINATION_CONSTANTS.DEFAULT_OFFSET), ParseIntPipe) offset?: number,
+    @Query(
+      'limit',
+      new DefaultValuePipe(PAGINATION_CONSTANTS.DEFAULT_LIMIT),
+      ParseIntPipe
+    )
+    limit?: number,
+    @Query(
+      'offset',
+      new DefaultValuePipe(PAGINATION_CONSTANTS.DEFAULT_OFFSET),
+      ParseIntPipe
+    )
+    offset?: number
   ) {
     return this.companiesService.findAll(sector, limit, offset);
   }

@@ -12,13 +12,13 @@ interface SectorFilterProps {
   onSearchChange: (term: string) => void;
 }
 
-const SectorFilter: React.FC<SectorFilterProps> = ({ 
-  sectors, 
-  selectedSector, 
-  onSectorChange, 
+const SectorFilter: React.FC<SectorFilterProps> = ({
+  sectors,
+  selectedSector,
+  onSectorChange,
   companiesCount,
   searchTerm,
-  onSearchChange
+  onSearchChange,
 }) => {
   return (
     <div className="sector-filter-container">
@@ -30,15 +30,14 @@ const SectorFilter: React.FC<SectorFilterProps> = ({
           {searchTerm && ` matching "${searchTerm}"`}
         </p>
         <p className="data-info">
-          Click column headers to sort • View dividends, loans, reserves, and capital information
+          Click column headers to sort • View dividends, loans, reserves, and
+          capital information
         </p>
       </div>
-      
+
       <div className="filters-container">
         <div className="filter-section">
-          <InputLabel htmlFor="sector-select">
-            Filter by Sector:
-          </InputLabel>
+          <InputLabel htmlFor="sector-select">Filter by Sector:</InputLabel>
           <select
             id="sector-select"
             value={selectedSector}
@@ -54,10 +53,7 @@ const SectorFilter: React.FC<SectorFilterProps> = ({
           </select>
         </div>
 
-        <SearchBar
-          searchTerm={searchTerm}
-          onSearchChange={onSearchChange}
-        />
+        <SearchBar searchTerm={searchTerm} onSearchChange={onSearchChange} />
       </div>
     </div>
   );

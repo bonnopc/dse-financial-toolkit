@@ -155,14 +155,14 @@ npm run start               # Run production server
 
 ```typescript
 // Example: Connect to PostgreSQL
-import { Pool } from "pg";
+import { Pool } from 'pg';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
 export async function GET() {
-  const result = await pool.query("SELECT * FROM companies");
+  const result = await pool.query('SELECT * FROM companies');
   return NextResponse.json(result.rows);
 }
 ```
@@ -172,7 +172,7 @@ export async function GET() {
 ```typescript
 // Example: Fetch live DSE data
 export async function GET() {
-  const response = await fetch("https://dse-api.com/companies");
+  const response = await fetch('https://dse-api.com/companies');
   const liveData = await response.json();
   return NextResponse.json(liveData);
 }
@@ -182,7 +182,7 @@ export async function GET() {
 
 ```typescript
 // Example: Add user authentication
-import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions } from 'next-auth';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -200,7 +200,7 @@ export async function GET() {
 
   return NextResponse.json(data, {
     headers: {
-      "Cache-Control": "public, max-age=3600", // Cache for 1 hour
+      'Cache-Control': 'public, max-age=3600', // Cache for 1 hour
     },
   });
 }

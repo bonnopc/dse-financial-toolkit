@@ -27,11 +27,11 @@ describe('CompaniesService', () => {
       priceValuationScore: 6,
       financialPerformanceScore: 9,
       shareholdingQualityScore: 8,
-      peRatioScore: 7
+      peRatioScore: 7,
     }),
     financial_score_calculated_at: new Date(),
     created_at: new Date(),
-    updated_at: new Date()
+    updated_at: new Date(),
   };
 
   const mockCreateCompanyDto: CreateCompanyDto = {
@@ -39,23 +39,23 @@ describe('CompaniesService', () => {
     fullName: 'Test Company Limited',
     dividends: [
       { year: 2023, cashDividend: 2, stockDividend: 0 },
-      { year: 2022, cashDividend: 1.8, stockDividend: 0 }
+      { year: 2022, cashDividend: 1.8, stockDividend: 0 },
     ],
     loans: {
       shortTermMillion: 20,
       longTermMillion: 30,
-      dateUpdated: '2023-12-31'
+      dateUpdated: '2023-12-31',
     },
     reserveAndIncome: {
       reserveMillion: 50,
       unappropriatedProfitMillion: 25,
-      dateUpdated: '2023-12-31'
+      dateUpdated: '2023-12-31',
     },
     metadata: {
       sector: 'Technology',
       authorizedCapitalInMillion: 200,
       paidUpCapitalInMillion: 100,
-      shareCount: 10000000
+      shareCount: 10000000,
     },
     priceInfo: {
       lastTradingPrice: 25,
@@ -65,11 +65,21 @@ describe('CompaniesService', () => {
       valueMillion: 25,
       tradeCount: 100,
       week52Min: 20,
-      week52Max: 30
+      week52Max: 30,
     },
     financialPerformance: [
-      { year: 2023, earningsPerShare: 3.5, netOperatingCashFlowPerShare: 4, netAssetValuePerShare: 15 },
-      { year: 2022, earningsPerShare: 3.2, netOperatingCashFlowPerShare: 3.8, netAssetValuePerShare: 14 }
+      {
+        year: 2023,
+        earningsPerShare: 3.5,
+        netOperatingCashFlowPerShare: 4,
+        netAssetValuePerShare: 15,
+      },
+      {
+        year: 2022,
+        earningsPerShare: 3.2,
+        netOperatingCashFlowPerShare: 3.8,
+        netAssetValuePerShare: 14,
+      },
     ],
     otherInfo: {
       listingYear: 2020,
@@ -81,11 +91,11 @@ describe('CompaniesService', () => {
           government: 5,
           institution: 25,
           foreign: 15,
-          publicShares: 25
-        }
-      ]
+          publicShares: 25,
+        },
+      ],
     },
-    unauditedPERatio: 15
+    unauditedPERatio: 15,
   };
 
   beforeEach(async () => {
@@ -127,9 +137,9 @@ describe('CompaniesService', () => {
           priceValuationScore: 6,
           financialPerformanceScore: 9,
           shareholdingQualityScore: 8,
-          peRatioScore: 7
-        }
-      })
+          peRatioScore: 7,
+        },
+      }),
     } as any;
 
     const module: TestingModule = await Test.createTestingModule({
@@ -164,9 +174,11 @@ describe('CompaniesService', () => {
         selectAll: jest.fn().mockReturnThis(),
         orderBy: jest.fn().mockReturnThis(),
         limit: jest.fn().mockReturnThis(),
-        executeTakeFirst: jest.fn()
+        executeTakeFirst: jest
+          .fn()
           .mockResolvedValueOnce(null) // No existing company
-          .mockResolvedValueOnce({ // Company data for financial scoring
+          .mockResolvedValueOnce({
+            // Company data for financial scoring
             ...mockCompany,
             paid_up_capital_million: 1,
             short_term_million: 0,
@@ -184,13 +196,13 @@ describe('CompaniesService', () => {
         executeTakeFirstOrThrow: jest.fn().mockResolvedValue(mockCompany),
         updateTable: jest.fn().mockReturnThis(),
         set: jest.fn().mockReturnThis(),
-        execute: jest.fn().mockResolvedValue(undefined)
+        execute: jest.fn().mockResolvedValue(undefined),
       };
 
       mockDb.transaction.mockReturnValue({
         execute: jest.fn().mockImplementation(async (callback) => {
           return callback(mockTrx);
-        })
+        }),
       });
 
       const result = await service.createCompany(mockCreateCompanyDto);
@@ -211,7 +223,7 @@ describe('CompaniesService', () => {
       mockDb.transaction.mockReturnValue({
         execute: jest.fn().mockImplementation(async (callback) => {
           return callback(mockTrx);
-        })
+        }),
       });
 
       await expect(service.createCompany(mockCreateCompanyDto)).rejects.toThrow(
@@ -237,20 +249,22 @@ describe('CompaniesService', () => {
         set: jest.fn().mockReturnThis(),
         execute: jest.fn().mockResolvedValue(undefined),
         orderBy: jest.fn().mockReturnThis(),
-        limit: jest.fn().mockReturnThis()
+        limit: jest.fn().mockReturnThis(),
       };
 
       mockDb.transaction.mockReturnValue({
         execute: jest.fn().mockImplementation(async (callback) => {
           return callback(mockTrx);
-        })
+        }),
       });
 
       const result = await service.upsertCompany(mockCreateCompanyDto);
 
       expect(result).toEqual(mockCompany);
       expect(mockTrx.updateTable).toHaveBeenCalledWith('companies');
-      expect(mockFinancialScoringService.calculateFinancialScore).toHaveBeenCalled();
+      expect(
+        mockFinancialScoringService.calculateFinancialScore
+      ).toHaveBeenCalled();
     });
 
     it('should create new company if not exists', async () => {
@@ -260,7 +274,8 @@ describe('CompaniesService', () => {
         where: jest.fn().mockReturnThis(),
         select: jest.fn().mockReturnThis(),
         selectAll: jest.fn().mockReturnThis(),
-        executeTakeFirst: jest.fn()
+        executeTakeFirst: jest
+          .fn()
           .mockResolvedValueOnce(null) // No existing company
           .mockResolvedValueOnce([]) // No dividends
           .mockResolvedValueOnce([]) // No financial performance
@@ -279,14 +294,16 @@ describe('CompaniesService', () => {
       mockDb.transaction.mockReturnValue({
         execute: jest.fn().mockImplementation(async (callback) => {
           return callback(mockTrx);
-        })
+        }),
       });
 
       const result = await service.upsertCompany(mockCreateCompanyDto);
 
       expect(result).toEqual(mockCompany);
       expect(mockTrx.insertInto).toHaveBeenCalledWith('companies');
-      expect(mockFinancialScoringService.calculateFinancialScore).toHaveBeenCalled();
+      expect(
+        mockFinancialScoringService.calculateFinancialScore
+      ).toHaveBeenCalled();
     });
 
     it('should calculate and store financial score during upsert', async () => {
@@ -296,7 +313,8 @@ describe('CompaniesService', () => {
         where: jest.fn().mockReturnThis(),
         select: jest.fn().mockReturnThis(),
         selectAll: jest.fn().mockReturnThis(),
-        executeTakeFirst: jest.fn()
+        executeTakeFirst: jest
+          .fn()
           .mockResolvedValueOnce(mockCompany) // Existing company found
           .mockResolvedValueOnce([]) // No dividends
           .mockResolvedValueOnce([]) // No financial performance
@@ -309,19 +327,21 @@ describe('CompaniesService', () => {
         set: jest.fn().mockReturnThis(),
         execute: jest.fn().mockResolvedValue(undefined),
         orderBy: jest.fn().mockReturnThis(),
-        limit: jest.fn().mockReturnThis()
+        limit: jest.fn().mockReturnThis(),
       };
 
       mockDb.transaction.mockReturnValue({
         execute: jest.fn().mockImplementation(async (callback) => {
           return callback(mockTrx);
-        })
+        }),
       });
 
       await service.upsertCompany(mockCreateCompanyDto);
 
       // Verify financial scoring service was called
-      expect(mockFinancialScoringService.calculateFinancialScore).toHaveBeenCalledWith(
+      expect(
+        mockFinancialScoringService.calculateFinancialScore
+      ).toHaveBeenCalledWith(
         expect.objectContaining({
           paidUpCapitalInMillion: 1, // This comes from the actual mock setup
           shortTermMillion: 0,
@@ -339,8 +359,8 @@ describe('CompaniesService', () => {
               sponsorOrDirector: 0,
               institution: 0,
               foreign: 0,
-            })
-          ])
+            }),
+          ]),
         })
       );
 
@@ -350,7 +370,7 @@ describe('CompaniesService', () => {
         expect.objectContaining({
           financial_score: 75.5,
           financial_score_components: expect.any(String),
-          financial_score_calculated_at: expect.any(Date)
+          financial_score_calculated_at: expect.any(Date),
         })
       );
     });
@@ -374,8 +394,8 @@ describe('CompaniesService', () => {
         short_term_million: 20,
         long_term_million: 30,
         reserve_million: 50,
-        unappropriated_profit_million: 25
-      }
+        unappropriated_profit_million: 25,
+      },
     ];
 
     it('should return all companies with financial scores', async () => {
@@ -423,7 +443,11 @@ describe('CompaniesService', () => {
 
       await service.findAll('Technology', 10, 0);
 
-      expect(mockDb.where).toHaveBeenCalledWith('companies.sector', '=', 'Technology');
+      expect(mockDb.where).toHaveBeenCalledWith(
+        'companies.sector',
+        '=',
+        'Technology'
+      );
     });
 
     it('should apply pagination correctly', async () => {
@@ -473,7 +497,9 @@ describe('CompaniesService', () => {
       mockDb.select.mockReturnThis();
       mockDb.executeTakeFirst.mockResolvedValue(null);
 
-      await expect(service.findOne('NOTFOUND')).rejects.toThrow(NotFoundException);
+      await expect(service.findOne('NOTFOUND')).rejects.toThrow(
+        NotFoundException
+      );
     });
   });
 
@@ -482,7 +508,7 @@ describe('CompaniesService', () => {
       const mockSectors = [
         { sector: 'Technology' },
         { sector: 'Banking' },
-        { sector: 'Pharmaceuticals' }
+        { sector: 'Pharmaceuticals' },
       ];
 
       mockDb.selectFrom.mockReturnThis();
@@ -508,12 +534,14 @@ describe('CompaniesService', () => {
       mockDb.offset.mockReturnThis();
       mockDb.execute.mockRejectedValue(new Error('Database connection failed'));
 
-      await expect(service.findAll()).rejects.toThrow('Database connection failed');
+      await expect(service.findAll()).rejects.toThrow(
+        'Database connection failed'
+      );
     });
 
     it('should handle transaction failures in upsertCompany', async () => {
       mockDb.transaction.mockReturnValue({
-        execute: jest.fn().mockRejectedValue(new Error('Transaction failed'))
+        execute: jest.fn().mockRejectedValue(new Error('Transaction failed')),
       });
 
       await expect(service.upsertCompany(mockCreateCompanyDto)).rejects.toThrow(

@@ -16,9 +16,7 @@ describe('AppController (e2e)', () => {
   });
 
   it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(404); // No root controller exists, so expect 404
+    return request(app.getHttpServer()).get('/').expect(404); // No root controller exists, so expect 404
   });
 
   afterAll(async () => {

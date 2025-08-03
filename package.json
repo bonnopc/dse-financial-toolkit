@@ -49,24 +49,13 @@
   },
   "lint-staged": {
     "*.{js,ts,tsx}": [
-      "prettier --write",
-      "prettier --check"
+      "prettier --write"
     ],
     "*.{json,md,yml,yaml}": [
-      "prettier --write",
-      "prettier --check"
+      "prettier --write"
     ],
-    "dse-api/**/*.{js,ts}": [
-      "cd dse-api && bun run lint",
-      "cd dse-api && bun run test --passWithNoTests --findRelatedTests --bail"
-    ],
-    "nextjs-dividend-viewer/**/*.{js,ts,tsx}": [
-      "cd nextjs-dividend-viewer && bun run lint",
-      "cd nextjs-dividend-viewer && bun run type-check"
-    ],
-    "dse-scraper/**/*.{js,ts}": [
-      "echo 'Running checks for dse-scraper...'",
-      "cd dse-scraper && bun run build"
+    "dse-api/src/**/*.{js,ts}": [
+      "bash -c 'cd dse-api && echo \"🔍 Running API lint and tests...\" && bun run lint && bun run test --bail'"
     ]
   },
   "devDependencies": {

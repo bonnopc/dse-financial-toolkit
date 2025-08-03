@@ -115,24 +115,22 @@ describe('Companies (e2e)', () => {
     const newCompanyDto = {
       name: `TEST${uniqueId}`,
       fullName: 'Test Company Limited',
-      dividends: [
-        { year: 2023, cashDividend: 2, stockDividend: 0 }
-      ],
+      dividends: [{ year: 2023, cashDividend: 2, stockDividend: 0 }],
       loans: {
         shortTermMillion: 20,
         longTermMillion: 30,
-        dateUpdated: '2023-12-31'
+        dateUpdated: '2023-12-31',
       },
       reserveAndIncome: {
         reserveMillion: 50,
         unappropriatedProfitMillion: 25,
-        dateUpdated: '2023-12-31'
+        dateUpdated: '2023-12-31',
       },
       metadata: {
         sector: 'Technology',
         authorizedCapitalInMillion: 200,
         paidUpCapitalInMillion: 100,
-        shareCount: 10000000
+        shareCount: 10000000,
       },
       priceInfo: {
         lastTradingPrice: 25,
@@ -142,10 +140,15 @@ describe('Companies (e2e)', () => {
         valueMillion: 25,
         tradeCount: 100,
         week52Min: 20,
-        week52Max: 30
+        week52Max: 30,
       },
       financialPerformance: [
-        { year: 2023, earningsPerShare: 3.5, netOperatingCashFlowPerShare: 4, netAssetValuePerShare: 15 }
+        {
+          year: 2023,
+          earningsPerShare: 3.5,
+          netOperatingCashFlowPerShare: 4,
+          netAssetValuePerShare: 15,
+        },
       ],
       otherInfo: {
         listingYear: 2020,
@@ -157,11 +160,11 @@ describe('Companies (e2e)', () => {
             government: 5,
             institution: 25,
             foreign: 15,
-            publicShares: 25
-          }
-        ]
+            publicShares: 25,
+          },
+        ],
       },
-      unauditedPERatio: 15
+      unauditedPERatio: 15,
     };
 
     it('should create a new company with financial score', () => {
@@ -174,9 +177,10 @@ describe('Companies (e2e)', () => {
           expect(res.body).toHaveProperty('financial_score');
           expect(res.body).toHaveProperty('financial_score_calculated_at');
           // Fix: Convert string to number if needed for validation
-          const financialScore = typeof res.body.financial_score === 'string' 
-            ? parseFloat(res.body.financial_score) 
-            : res.body.financial_score;
+          const financialScore =
+            typeof res.body.financial_score === 'string'
+              ? parseFloat(res.body.financial_score)
+              : res.body.financial_score;
           expect(typeof financialScore).toBe('number');
         });
     });
@@ -195,24 +199,22 @@ describe('Companies (e2e)', () => {
     const upsertCompanyDto = {
       name: `UPS${uniqueId}`,
       fullName: 'Upsert Test Company Limited',
-      dividends: [
-        { year: 2023, cashDividend: 3, stockDividend: 0 }
-      ],
+      dividends: [{ year: 2023, cashDividend: 3, stockDividend: 0 }],
       loans: {
         shortTermMillion: 15,
         longTermMillion: 25,
-        dateUpdated: '2023-12-31'
+        dateUpdated: '2023-12-31',
       },
       reserveAndIncome: {
         reserveMillion: 60,
         unappropriatedProfitMillion: 30,
-        dateUpdated: '2023-12-31'
+        dateUpdated: '2023-12-31',
       },
       metadata: {
         sector: 'Banking',
         authorizedCapitalInMillion: 300,
         paidUpCapitalInMillion: 150,
-        shareCount: 15000000
+        shareCount: 15000000,
       },
       priceInfo: {
         lastTradingPrice: 30,
@@ -222,10 +224,15 @@ describe('Companies (e2e)', () => {
         valueMillion: 45,
         tradeCount: 150,
         week52Min: 25,
-        week52Max: 35
+        week52Max: 35,
       },
       financialPerformance: [
-        { year: 2023, earningsPerShare: 4.5, netOperatingCashFlowPerShare: 5, netAssetValuePerShare: 20 }
+        {
+          year: 2023,
+          earningsPerShare: 4.5,
+          netOperatingCashFlowPerShare: 5,
+          netAssetValuePerShare: 20,
+        },
       ],
       otherInfo: {
         listingYear: 2018,
@@ -237,11 +244,11 @@ describe('Companies (e2e)', () => {
             government: 10,
             institution: 30,
             foreign: 20,
-            publicShares: 5
-          }
-        ]
+            publicShares: 5,
+          },
+        ],
       },
-      unauditedPERatio: 12
+      unauditedPERatio: 12,
     };
 
     it('should upsert company and calculate financial score', () => {
@@ -254,9 +261,10 @@ describe('Companies (e2e)', () => {
           expect(res.body).toHaveProperty('financial_score');
           expect(res.body).toHaveProperty('financial_score_calculated_at');
           // Fix: Convert string to number if needed
-          const financialScore = typeof res.body.financial_score === 'string' 
-            ? parseFloat(res.body.financial_score) 
-            : res.body.financial_score;
+          const financialScore =
+            typeof res.body.financial_score === 'string'
+              ? parseFloat(res.body.financial_score)
+              : res.body.financial_score;
           expect(typeof financialScore).toBe('number');
           expect(financialScore).toBeGreaterThan(0);
           expect(financialScore).toBeLessThanOrEqual(100);
@@ -268,8 +276,8 @@ describe('Companies (e2e)', () => {
         ...upsertCompanyDto,
         dividends: [
           { year: 2023, cashDividend: 4, stockDividend: 0 },
-          { year: 2022, cashDividend: 3.5, stockDividend: 0 }
-        ]
+          { year: 2022, cashDividend: 3.5, stockDividend: 0 },
+        ],
       };
 
       return request(app.getHttpServer())

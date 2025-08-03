@@ -8,14 +8,17 @@ interface DividendHistoryTooltipProps {
   totalDividends: number;
 }
 
-const DividendHistoryTooltip: React.FC<DividendHistoryTooltipProps> = ({ company, totalDividends }) => {
-  const sortedDividends = [...company.dividends].sort((a, b) => b.year - a.year); // Most recent first
+const DividendHistoryTooltip: React.FC<DividendHistoryTooltipProps> = ({
+  company,
+  totalDividends,
+}) => {
+  const sortedDividends = [...company.dividends].sort(
+    (a, b) => b.year - a.year
+  ); // Most recent first
 
   const tooltipContent = (
     <>
-      <div className="tooltip-header">
-        {company.name} - Dividend History
-      </div>
+      <div className="tooltip-header">{company.name} - Dividend History</div>
       <div className="tooltip-content">
         {sortedDividends.length === 0 ? (
           <div className="no-dividends">No dividend history available</div>

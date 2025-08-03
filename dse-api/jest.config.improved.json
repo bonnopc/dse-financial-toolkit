@@ -1,0 +1,40 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": ".*\\.spec\\.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "collectCoverageFrom": [
+    "src/**/*.(t|j)s",
+    "!src/**/*.spec.ts",
+    "!src/**/*.e2e-spec.ts",
+    "!src/test-utils/**/*",
+    "!src/main.ts",
+    "!src/**/*.module.ts"
+  ],
+  "coverageDirectory": "../coverage",
+  "coverageReporters": ["text", "lcov", "html"],
+  "testPathIgnorePatterns": ["/node_modules/", "/dist/", ".e2e-spec.ts$"],
+  "moduleNameMapping": {
+    "^src/(.*)$": "<rootDir>/src/$1"
+  },
+  "setupFilesAfterEnv": ["<rootDir>/test/setup.ts"],
+  "projects": [
+    {
+      "displayName": "unit",
+      "testMatch": ["<rootDir>/src/**/*.spec.ts"],
+      "testPathIgnorePatterns": [".e2e-spec.ts$", "integration.spec.ts$"]
+    },
+    {
+      "displayName": "integration",
+      "testMatch": ["<rootDir>/src/**/integration/*.spec.ts"]
+    },
+    {
+      "displayName": "e2e",
+      "testMatch": ["<rootDir>/test/**/*.e2e-spec.ts"],
+      "setupFilesAfterEnv": ["<rootDir>/test/setup.ts"]
+    }
+  ]
+}

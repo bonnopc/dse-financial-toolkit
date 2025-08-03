@@ -7,7 +7,11 @@ interface InputLabelProps {
   className?: string;
 }
 
-const InputLabel: React.FC<InputLabelProps> = ({ htmlFor, children, className = '' }) => {
+const InputLabel: React.FC<InputLabelProps> = ({
+  htmlFor,
+  children,
+  className = '',
+}) => {
   return (
     <label htmlFor={htmlFor} className={`input-label ${className}`}>
       {children}

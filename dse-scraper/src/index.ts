@@ -19,8 +19,8 @@ const typeDefs = gql`
 // Define your resolvers
 const resolvers = {
   Query: {
-    dividends: () => dividends
-  }
+    dividends: () => dividends,
+  },
 };
 
 // Create the Apollo Server

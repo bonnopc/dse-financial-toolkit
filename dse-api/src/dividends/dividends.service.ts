@@ -7,7 +7,7 @@ import { Database } from '../database/schema';
 export class DividendsService {
   constructor(
     @Inject(DATABASE_CONNECTION)
-    private readonly db: Kysely<Database>,
+    private readonly db: Kysely<Database>
   ) {}
 
   async findByCompany(companyCode: string) {
@@ -30,11 +30,7 @@ export class DividendsService {
     return await this.db
       .selectFrom('dividends')
       .innerJoin('companies', 'companies.id', 'dividends.company_id')
-      .select([
-        'companies.code',
-        'companies.full_name',
-        'companies.sector',
-      ])
+      .select(['companies.code', 'companies.full_name', 'companies.sector'])
       .select((eb) => [
         eb.fn.avg('dividends.cash_dividend').as('avg_cash_dividend'),
         eb.fn.avg('dividends.stock_dividend').as('avg_stock_dividend'),
@@ -70,9 +66,7 @@ export class DividendsService {
 
     return await this.db
       .selectFrom('dividends')
-      .select([
-        'dividends.year',
-      ])
+      .select(['dividends.year'])
       .select((eb) => [
         eb.fn.avg('dividends.cash_dividend').as('avg_cash_dividend'),
         eb.fn.avg('dividends.stock_dividend').as('avg_stock_dividend'),

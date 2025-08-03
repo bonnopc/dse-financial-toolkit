@@ -1,4 +1,3 @@
-import { ConfigService } from '@nestjs/config';
 import dotenv from 'dotenv';
 import { Kysely, PostgresDialect } from 'kysely';
 import { Pool } from 'pg';
@@ -10,8 +9,6 @@ import { Database } from './schema';
 dotenv.config();
 
 async function migrate() {
-  const configService = new ConfigService();
-  
   const pool = new Pool({
     host: process.env.DB_HOST || 'localhost',
     port: parseInt(process.env.DB_PORT || '5432'),
@@ -32,7 +29,7 @@ async function migrate() {
       host: process.env.DB_HOST,
       port: process.env.DB_PORT,
       user: process.env.DB_USERNAME,
-      database: process.env.DB_NAME
+      database: process.env.DB_NAME,
     });
     await up(db);
     console.log('✅ Initial schema migration completed');

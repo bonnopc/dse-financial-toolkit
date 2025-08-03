@@ -6,18 +6,21 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+
   const configService = app.get(ConfigService);
   const port = configService.get('PORT') || 3001;
   const apiPrefix = configService.get('API_PREFIX') || 'api/v1';
-  const corsOrigin = configService.get('CORS_ORIGIN') || 'http://localhost:3000';
+  const corsOrigin =
+    configService.get('CORS_ORIGIN') || 'http://localhost:3000';
 
   // Global validation pipe
-  app.useGlobalPipes(new ValidationPipe({
-    transform: true,
-    whitelist: true,
-    forbidNonWhitelisted: true,
-  }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    })
+  );
 
   // CORS configuration
   app.enableCors({
@@ -38,13 +41,16 @@ async function bootstrap() {
     .addTag('dividends')
     .addTag('sectors')
     .build();
-  
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
   await app.listen(port);
-  console.log(`🚀 DSE API is running on: http://localhost:${port}/${apiPrefix}`);
+  console.log(
+    `🚀 DSE API is running on: http://localhost:${port}/${apiPrefix}`
+  );
   console.log(`📚 API Documentation: http://localhost:${port}/docs`);
 }
 
 bootstrap();
+// Test comment

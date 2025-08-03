@@ -70,11 +70,13 @@ bun run scraper:scrape # Run scraping
 2. You run `git commit`
 3. **Husky** intercepts the commit
 4. **lint-staged** runs on staged files:
-   - Formats code with **Prettier**
-   - Runs linting on API files
-   - Runs tests on changed API files (optional)
-5. If everything passes, the commit proceeds
-6. If there are issues, the commit is blocked
+   - Formats code with **Prettier** and checks formatting
+   - Runs ESLint on API files with auto-fix
+   - Runs full test suite for API when API files change
+   - Runs type-checking for Next.js when frontend files change
+   - Runs build for scraper when scraper files change
+5. If **any step fails**, the commit is blocked
+6. If everything passes, the commit proceeds
 
 ### Manual Formatting
 

@@ -17,7 +17,9 @@ interface UseCompaniesOptions {
   offset?: number;
 }
 
-export function useCompanies(options: UseCompaniesOptions = {}): UseCompaniesReturn {
+export function useCompanies(
+  options: UseCompaniesOptions = {}
+): UseCompaniesReturn {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -35,12 +37,14 @@ export function useCompanies(options: UseCompaniesOptions = {}): UseCompaniesRet
       ]);
 
       // Transform API data to frontend format
-      const transformedCompanies = transformApiCompaniesToCompanies(apiCompanies);
-      
+      const transformedCompanies =
+        transformApiCompaniesToCompanies(apiCompanies);
+
       setCompanies(transformedCompanies);
       setSectors(['All', ...apiSectors.filter(Boolean)]);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch companies';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to fetch companies';
       setError(errorMessage);
       console.error('Error fetching companies:', err);
     } finally {
