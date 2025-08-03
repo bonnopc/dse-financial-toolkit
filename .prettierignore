@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+bun.lockb
+
+# Production builds
+dist/
+build/
+.next/
+out/
+
+# Logs
+*.log
+logs/
+
+# Environment files
+.env*
+
+# Coverage reports
+coverage/
+
+# Cache directories
+.cache/
+.turbo/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Database
+*.db
+*.sqlite
+
+# Temporary files
+tmp/
+temp/
