@@ -12,12 +12,23 @@
     "scraper:build": "cd dse-scraper && bun run build",
     "scraper:start": "cd dse-scraper && bun run start",
     "scraper:scrape": "cd dse-scraper && bun run scrape",
+    "api:dev": "cd dse-api && bun run start:dev",
+    "api:build": "cd dse-api && bun run build",
+    "api:start": "cd dse-api && bun run start:prod",
+    "api:test": "cd dse-api && bun run test",
+    "api:test:e2e": "cd dse-api && bun run test:e2e",
+    "api:lint": "cd dse-api && bun run lint",
     "nextjs:dev": "cd nextjs-dividend-viewer && bun run dev",
     "nextjs:build": "cd nextjs-dividend-viewer && bun run build",
     "nextjs:start": "cd nextjs-dividend-viewer && bun run start",
-    "install:all": "bun install && cd dse-scraper && bun install && cd ../nextjs-dividend-viewer && bun install",
+    "nextjs:lint": "cd nextjs-dividend-viewer && bun run lint",
+    "install:all": "bun install && cd dse-scraper && bun install && cd ../nextjs-dividend-viewer && bun install && cd ../dse-api && bun install",
     "dev": "bun run nextjs:dev",
-    "build:all": "bun run scraper:build && bun run nextjs:build"
+    "build:all": "bun run scraper:build && bun run api:build && bun run nextjs:build",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test:all": "bun run api:test && bun run api:test:e2e",
+    "prepare": "husky"
   },
   "keywords": [
     "dse",
@@ -36,7 +47,23 @@
   "engines": {
     "node": ">=20.18.0"
   },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
+    "eslint": "^9.32.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
+    "prettier": "^3.6.2",
     "typescript": "^5.8.3"
   }
 }
