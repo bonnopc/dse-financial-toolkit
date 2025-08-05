@@ -1,6 +1,6 @@
 # DSE Dividend Viewer - Next.js
 
-A modern web application for viewing and analyzing Dhaka Stock Exchange (DSE) dividend data with comprehensive financial health scoring.
+A modern web application for viewing and analyzing Dhaka Stock Exchange (DSE) dividend data with comprehensive financial health scoring. This application now integrates with the DSE API for real-time data fetching and management.
 
 ## Features
 
@@ -17,6 +17,7 @@ A modern web application for viewing and analyzing Dhaka Stock Exchange (DSE) di
   - Shareholding Quality - ownership structure analysis (10% weight)
 - 📈 **Dividend History Tooltips**: Detailed year-by-year dividend breakdown
 - 💲 **Real Market Data Integration**: Last trading prices with live dividend yield calculations
+- 🚀 **API Integration**: Real-time data fetching from DSE API backend
 - 📱 **Responsive Design**: Optimized for desktop and mobile devices
 - ⚡ **Fast Performance**: Built with Next.js for optimal loading speeds
 
@@ -26,6 +27,8 @@ A modern web application for viewing and analyzing Dhaka Stock Exchange (DSE) di
 - **Language**: TypeScript
 - **Styling**: CSS3 with responsive design
 - **Data Processing**: Client-side JSON processing with financial scoring algorithms
+- **API Integration**: Custom hooks for real-time data fetching from DSE API
+- **State Management**: React hooks and context for data management
 
 ## Getting Started
 
@@ -33,6 +36,7 @@ A modern web application for viewing and analyzing Dhaka Stock Exchange (DSE) di
 
 - Node.js 20.18.0+
 - Bun
+- DSE API running (see `/dse-api` directory for setup)
 
 ### Installation
 
@@ -49,13 +53,17 @@ A modern web application for viewing and analyzing Dhaka Stock Exchange (DSE) di
    bun install
    ```
 
-3. Start the development server:
+3. Configure API endpoint (if needed):
+
+   Update the API base URL in `src/lib/dse-api-client.ts` if your API is not running on the default `http://localhost:3001`
+
+4. Start the development server:
 
    ```bash
    bun run dev
    ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ### Available Scripts
 
@@ -199,32 +207,49 @@ src/
 │   └── SmartTooltip/
 │       ├── SmartTooltip.tsx    # Smart positioning tooltip
 │       └── SmartTooltip.css    # Tooltip styles
+├── hooks/
+│   ├── useApiData.ts        # Generic API data fetching hook
+│   └── useCompanies.ts      # Company-specific data management
+├── lib/
+│   ├── data-transformer.ts  # API to frontend data transformation
+│   └── dse-api-client.ts    # API client for backend communication
+├── providers/
+│   └── query-provider.tsx   # React Query provider for data fetching
 ├── types/
 │   └── Company.ts          # TypeScript interfaces
 ├── utils/
 │   └── financialScoring.ts # Financial health algorithm
 └── data/
-    └── dividends.json      # DSE company data
+    └── dividends.json      # Fallback/seed data (legacy)
 ```
 
 ## Data Source
 
-The application processes data for DSE companies including:
+The application now primarily fetches data from the DSE API backend, which provides:
 
-- Company metadata (sector, capital structure)
+- Real-time company information and financial data
 - Historical dividend payments (cash and stock)
-- Financial information (loans, reserves)
-- Share count and capital information
+- Current market prices and trading information
+- Financial metrics and ownership structures
+- Sector classifications and company metadata
 
-## API Ready Architecture
+The application includes a data transformation layer that converts API responses to the frontend data structure, ensuring optimal performance and user experience.
 
-This Next.js application is designed to easily integrate backend APIs:
+## API Integration
 
-- **API Routes**: Use `src/app/api/` directory for backend endpoints
-- **Server Components**: Fetch data on the server for better performance
-- **Database Integration**: Add databases like PostgreSQL, MongoDB, or MySQL
-- **Authentication**: Integrate NextAuth.js or custom auth solutions
-- **Caching**: Built-in Next.js caching for optimal performance
+This Next.js application is fully integrated with the DSE API backend:
+
+- **Real-time Data**: Fetches live data from the NestJS API
+- **Caching**: Uses React Query for efficient data caching and synchronization
+- **Error Handling**: Graceful error handling with fallback mechanisms
+- **Type Safety**: Full TypeScript support with API response typing
+- **Performance**: Optimized data fetching with pagination and filtering
+
+### API Endpoints Used
+
+- `GET /api/v1/companies` - Fetch companies with filtering and pagination
+- `GET /api/v1/companies/sectors` - Get available sectors
+- Additional endpoints as needed for enhanced functionality
 
 ## Future Enhancements
 

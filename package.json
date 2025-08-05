@@ -5,6 +5,7 @@
   "private": true,
   "workspaces": [
     "dse-scraper",
+    "dse-api",
     "nextjs-dividend-viewer"
   ],
   "scripts": {
@@ -38,6 +39,9 @@
     "dividends",
     "stock-analysis",
     "scraper",
+    "api",
+    "nestjs",
+    "postgresql",
     "nextjs",
     "react",
     "typescript"

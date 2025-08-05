@@ -4,26 +4,34 @@ A comprehensive financial toolkit for Dhaka Stock Exchange (DSE) analysis featur
 
 ## 🏗️ Project Structure
 
-This is a monorepo containing two main applications:
+This is a monorepo containing three main applications:
 
 ```
 dse-financial-toolkit/
-├── dse-scraper/ # Node.js web scraper
-│ ├── src/
-│ │ ├── scraper.ts # Main scraper logic
-│ │ ├── scrapers/ # Individual scrapers
-│ │ └── types/ # TypeScript interfaces
-│ ├── package.json
-│ └── tsconfig.json
-├── nextjs-dividend-viewer/ # Next.js web application
-│ ├── src/
-│ │ ├── app/ # App router pages
-│ │ ├── components/ # React components
-│ │ ├── types/ # TypeScript interfaces
-│ │ └── utils/ # Utility functions
-│ ├── package.json
-│ └── next.config.js
-└── package.json # Root package.json
+├── dse-scraper/              # Node.js web scraper
+│   ├── src/
+│   │   ├── scraper.ts        # Main scraper logic
+│   │   ├── scrapers/         # Individual scrapers
+│   │   └── types/            # TypeScript interfaces
+│   ├── package.json
+│   └── tsconfig.json
+├── dse-api/                  # NestJS REST API
+│   ├── src/
+│   │   ├── companies/        # Companies module
+│   │   ├── dividends/        # Dividends module
+│   │   ├── database/         # Database configuration
+│   │   └── types/            # TypeScript interfaces
+│   ├── package.json
+│   └── tsconfig.json
+├── nextjs-dividend-viewer/   # Next.js web application
+│   ├── src/
+│   │   ├── app/              # App router pages
+│   │   ├── components/       # React components
+│   │   ├── types/            # TypeScript interfaces
+│   │   └── utils/            # Utility functions
+│   ├── package.json
+│   └── next.config.js
+└── package.json              # Root package.json
 ```
 
 ## 🚀 Quick Start
@@ -63,6 +71,21 @@ bun run scraper:start
 bun run scraper:scrape
 ```
 
+#### **DSE API (NestJS)**
+
+```bash
+# Development mode
+bun run api:dev
+
+# Production build
+bun run api:build
+bun run api:start
+
+# Run tests
+bun run api:test
+bun run api:test:e2e
+```
+
 #### **Next.js Web App**
 
 ```bash
@@ -80,15 +103,13 @@ bun run nextjs:start
 bun run build:all
 ```
 
-## �️ Build Commands
-
-Build all projects:
+### Test All Projects
 
 ```bash
-bun run build:all
+bun run test:all
 ```
 
-## �📊 Applications Overview
+## 📊 Applications Overview
 
 ### 1. **DSE Scraper** (`/dse-scraper`)
 
@@ -98,19 +119,28 @@ bun run build:all
   - Company dividend history scraping
   - Financial data extraction
   - Price information collection
-  - Data processing and JSON export
 
-### 2. **Next.js Dividend Viewer** (`/nextjs-dividend-viewer`)
+### 2. **DSE API** (`/dse-api`)
 
-- **Technology**: Next.js 14 + TypeScript + Bun
-- **Purpose**: Modern web application for dividend analysis
+- **Technology**: NestJS + PostgreSQL + Kysely + TypeScript
+- **Purpose**: RESTful API for financial data management
 - **Features**:
-  - 📊 Interactive data tables with sorting
-  - 🔍 Advanced filtering by sector and search
-  - 💰 8-component financial health scoring system
-  - 📈 Dividend history tooltips
-  - 📱 Responsive design
-  - ⚡ Server-side rendering
+  - Companies management with CRUD operations
+  - Dividend tracking and analytics
+  - Financial health scoring algorithms
+  - Auto-generated Swagger documentation
+  - Type-safe database queries with Kysely
+
+### 3. **DSE Dividend Viewer** (`/nextjs-dividend-viewer`)
+
+- **Technology**: Next.js 14 + TypeScript + CSS3
+- **Purpose**: Interactive web dashboard for dividend analysis
+- **Features**:
+  - Real-time dividend data visualization
+  - Advanced filtering and search capabilities
+  - 8-component financial health scoring system
+  - Responsive design for all devices
+  - Comprehensive dividend history tooltips
 
 ## 🧮 Financial Scoring Algorithm
 
@@ -138,6 +168,10 @@ Each application can be developed independently:
 cd dse-scraper
 bun run dev
 
+# Work on API
+cd dse-api
+bun run start:dev
+
 # Work on Next.js app
 cd nextjs-dividend-viewer
 bun run dev
@@ -146,9 +180,9 @@ bun run dev
 ### Data Flow
 
 1. **Scraper** collects data from DSE websites
-2. **Data** is processed and saved to `dividends.json`
-3. **Applications** read and analyze the JSON data
-4. **Users** interact with visualized financial insights
+2. **API** stores and manages data in PostgreSQL database
+3. **Next.js App** consumes API data for visualization
+4. **Users** interact with real-time financial insights
 
 ## 📈 Data Sources
 
@@ -162,22 +196,28 @@ The scraper collects comprehensive DSE data including:
 
 ## 🔧 Technology Stack
 
-| Component           | Technologies                             |
-| ------------------- | ---------------------------------------- |
-| **Scraper**         | Node.js, TypeScript, Cheerio, Axios, Bun |
-| **Next.js App**     | Next.js 14, TypeScript, React, CSS3, Bun |
-| **Data Processing** | JSON, Custom algorithms                  |
-| **Development**     | ESLint, TypeScript, Git, Bun             |
+| Component           | Technologies                                 |
+| ------------------- | -------------------------------------------- |
+| **Scraper**         | Node.js, TypeScript, Cheerio, Axios, Bun     |
+| **API**             | NestJS, PostgreSQL, Kysely, TypeScript, Bun  |
+| **Next.js App**     | Next.js 14, TypeScript, React, CSS3, Bun     |
+| **Data Processing** | Custom algorithms, Financial scoring         |
+| **Development**     | ESLint, Jest, Prettier, TypeScript, Git, Bun |
 
 ## 🚀 Deployment
+
+### API
+
+- **Database**: PostgreSQL on cloud providers (AWS RDS, Railway, etc.)
+- **API Hosting**: Node.js hosting (Vercel, Railway, AWS)
+- **Environment**: Configure database URLs and API keys
 
 ### Next.js App
 
 - **Vercel**: `cd nextjs-dividend-viewer && vercel`
 - **Netlify**: Build command: `bun run nextjs:build`
 - **Docker**: Use Next.js Docker configuration
-- **Vercel**: Static site deployment
-- **GitHub Pages**: Deploy from `build/` folder
+- **Static Export**: Can be deployed to any static hosting
 
 ### Scraper
 
@@ -210,5 +250,3 @@ For questions and support:
 ---
 
 **Made with ❤️ for the Bangladesh financial community**
-
-# Test commit

@@ -47,13 +47,13 @@ GRANT ALL PRIVILEGES ON DATABASE dse_financial_db TO your_username;
 
 ### 3. Environment Configuration
 
-Copy the environment example file:
+Create a `.env` file in the dse-api directory:
 
 ```bash
-cp .env.example .env
+touch .env
 ```
 
-Update `.env` with your database credentials:
+Add your database credentials to `.env`:
 
 ```env
 NODE_ENV=development
@@ -130,7 +130,6 @@ bun run start:prod         # Start production build
 
 # Database
 bun run db:migrate         # Run migrations
-bun run db:seed           # Seed sample data
 
 # Testing
 bun run test              # Run unit tests
@@ -169,5 +168,3 @@ For production deployment:
 - Visit `/docs` endpoint for interactive Swagger documentation
 - All endpoints are fully documented with request/response schemas
 - Examples included for all API operations
-
-# TypeScript version fix

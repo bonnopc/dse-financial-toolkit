@@ -51,7 +51,11 @@ bun run scrape
 
 ## Data Output
 
-The scraper generates `dividends.json` with comprehensive company data:
+The scraper can output data in multiple formats:
+
+### JSON Export (Default)
+
+Generates `dividends.json` with comprehensive company data:
 
 ```json
 {
@@ -64,6 +68,14 @@ The scraper generates `dividends.json` with comprehensive company data:
   "financialPerformance": [...]
 }
 ```
+
+### API Integration
+
+Can send data directly to the DSE API for database storage:
+
+- POST to `/api/v1/companies` endpoint
+- Structured data storage in PostgreSQL
+- Real-time updates for web applications
 
 ## Configuration
 
@@ -79,7 +91,8 @@ Configure scraping parameters in `src/scraper.ts`:
 - **axios**: HTTP client for web requests
 - **cheerio**: Server-side HTML parsing
 - **p-limit**: Concurrency control
-- **graphql/apollo-server**: API capabilities (optional)
+- **apollo-server**: GraphQL API capabilities
+- **graphql**: GraphQL schema and resolver support
 
 ## Development
 
